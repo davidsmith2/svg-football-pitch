@@ -49,6 +49,17 @@ function getCenterMark() {
   };
 }
 
+function getCoord(value) {
+  return Math.round(value / this.settings.scaleFactor);
+}
+
+function getCoords(marker) {
+  return [
+    getCoord.call(this, marker.x),
+    getCoord.call(this, marker.y)
+  ]
+}
+
 function getCornerArcs() {
   const radius = CONSTANTS.CORNER_ARC_RADIUS;
   return [
@@ -237,6 +248,7 @@ export const basicPitch = {
   drawLine,
   getCenterCircle,
   getCenterMark,
+  getCoords,
   getCornerArcs,
   getCursorPoint,
   getHalfwayLinePoint,

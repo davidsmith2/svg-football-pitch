@@ -48,21 +48,14 @@ export class Pitch extends Component {
   }
   handleClick(e) {
     e.preventDefault();
-    const cursorPoint = this.pitchFactory.getCursorPoint(e);
     this.setState({
-      marker: {
-        x: cursorPoint.x,
-        y: cursorPoint.y
-      }
+      marker: this.pitchFactory.getCursorPoint(e)
     });
   }
   render() {
-    const {x, y} = this.state.marker;
+    const coords = this.pitchFactory.getCoords(this.state.marker);
     const {scaleFactor} = this.pitchFactory.settings;
-    const coords = [
-      Math.round(x / scaleFactor),
-      Math.round(y / scaleFactor)
-    ];
+    const {x, y} = this.state.marker;
     return (
       <div onClick={this.handleClick} style={styles.pitch}>
         <svg height={this.pitchFactory.getHeightInPixels()} width={this.pitchFactory.getWidthInPixels()} fill="transparent">
