@@ -1,9 +1,17 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import App from './App';
-import './index.css';
+import {render} from 'react-dom';
+import {Provider} from 'react-redux';
+import {createStore} from 'redux';
 
-ReactDOM.render(
-  <App />,
+import './index.css';
+import {svgFootballPitch} from './reducers';
+import AppContainer from './containers/appContainer';
+
+let store = createStore(svgFootballPitch);
+
+render(
+  <Provider store={store}>
+    <AppContainer />
+  </Provider>,
   document.getElementById('root')
 );

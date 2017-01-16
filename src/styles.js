@@ -1,5 +1,10 @@
 export const styles = {
+  test: {
+    margin: '0 auto',
+    width: '960px'
+  },
   pitch: {
+    backgroundColor: 'green',
     position: 'relative'
   },
   tooltip: {
@@ -11,4 +16,3 @@ export const styles = {
     zIndex: 10
   }
 };
-

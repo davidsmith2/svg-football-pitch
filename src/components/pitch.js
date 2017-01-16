@@ -22,7 +22,7 @@ export class Pitch extends Component {
   }
   constructor(props) {
     super(props);
-    this.pitchFactory = props.pitchFactory;
+    this.pitchFactory = this.props.pitchFactory;
     this.state = {
       marker: {
         x: -2,
@@ -33,6 +33,7 @@ export class Pitch extends Component {
   }
   componentDidMount() {
     //this.d3();
+    this.pitchFactory = this.props.pitchFactory;
   }
   componentDidUpdate() {
     //this.d3();
@@ -53,11 +54,12 @@ export class Pitch extends Component {
     });
   }
   render() {
+    this.pitchFactory = this.props.pitchFactory;
     const coords = this.pitchFactory.getCoords(this.state.marker);
     const {scaleFactor} = this.pitchFactory.settings;
     const {x, y} = this.state.marker;
     return (
-      <div onClick={this.handleClick} style={styles.pitch}>
+      <div onClick={this.handleClick} style={styles.pitch} id="pitch">
         <svg height={this.pitchFactory.getHeightInPixels()} width={this.pitchFactory.getWidthInPixels()} fill="transparent">
           <g ref="pitch" transform={this.pitchFactory.transform()}>
             <Lines />
