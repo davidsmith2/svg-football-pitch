@@ -5,8 +5,6 @@ import {} from '../basic';
 import {
   convertWidthToPixels,
   convertLengthToPixels,
-  _getPenaltyArcs,
-  toSquare,
   translate
 } from '../../utils';
 

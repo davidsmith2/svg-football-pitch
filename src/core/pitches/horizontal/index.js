@@ -4,7 +4,6 @@ import * as CONSTANTS from '../../constants';
 import {
   convertWidthToPixels,
   convertLengthToPixels,
-  toSquare,
   translate
 } from '../../utils';
 
