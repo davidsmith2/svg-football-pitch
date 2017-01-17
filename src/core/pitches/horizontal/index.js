@@ -81,7 +81,7 @@ function getHalfwayLine() {
 }
 
 function getHeightInPixels() {
-  return convertLengthToPixels.call(this) + toSquare(this.settings.perimeter * this.settings.scaleFactor);
+  return convertWidthToPixels.call(this) + ((this.settings.perimeter * 2) * this.settings.scaleFactor);
 }
 
 function getPenaltyArcs() {
@@ -125,7 +125,7 @@ function getTouchLines() {
 }
 
 function getWidthInPixels() {
-  return convertWidthToPixels.call(this) + toSquare(this.settings.perimeter * this.settings.scaleFactor);
+  return convertLengthToPixels.call(this) + ((this.settings.perimeter * 2) * this.settings.scaleFactor);
 }
 
 function getXScale() {

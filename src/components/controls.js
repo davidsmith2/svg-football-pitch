@@ -1,9 +1,11 @@
 import React from 'react';
 
+import {styles} from '../styles';
+
 export const Controls = (props) => {
   console.log(props.orientation);
   return (
-    <div id="controls">
+    <div id="controls" style={styles.controls}>
       <form>
         <label>
           <input

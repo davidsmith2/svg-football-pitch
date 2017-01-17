@@ -59,9 +59,17 @@ export class Pitch extends Component {
     const {scaleFactor} = this.pitchFactory.settings;
     const {x, y} = this.state.marker;
     return (
-      <div onClick={this.handleClick} style={styles.pitch} id="pitch">
-        <svg height={this.pitchFactory.getHeightInPixels()} width={this.pitchFactory.getWidthInPixels()} fill="transparent">
-          <g ref="pitch" transform={this.pitchFactory.transform()}>
+      <div id="pitch" onClick={this.handleClick} style={styles.pitch.container}>
+        <svg
+          fill="transparent"
+          height={this.pitchFactory.getHeightInPixels()}
+          width={this.pitchFactory.getWidthInPixels()}
+          style={styles.pitch.svg}
+        >
+          <g
+            ref="pitch"
+            transform={this.pitchFactory.transform()}
+          >
             <Lines />
             <Arcs />
             {this.pitchFactory.inPlay(coords) &&
@@ -76,6 +84,7 @@ export class Pitch extends Component {
               <ShotTriangle
                 id="shot-triangle"
                 data={this.pitchFactory.getTriangle(coords)}
+                stroke="yellow"
               />
             </g>
             }

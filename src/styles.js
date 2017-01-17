@@ -1,11 +1,15 @@
 export const styles = {
-  test: {
-    margin: '0 auto',
-    width: '960px'
+  app: {
+  },
+  controls: {
   },
   pitch: {
-    backgroundColor: 'green',
-    position: 'relative'
+    container: {
+      position: 'relative'
+    },
+    svg: {
+      backgroundColor: 'green'
+    }
   },
   tooltip: {
     backgroundColor: 'black',
