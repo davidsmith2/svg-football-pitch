@@ -1,29 +1,22 @@
 import * as d3 from "d3";
 
 import * as CONSTANTS from '../../constants';
-
-function convertLengthToPixels() {
-  return this.settings.length * this.settings.scaleFactor;
-}
-
-function convertWidthToPixels() {
-  return this.settings.width * this.settings.scaleFactor;
-}
-
-function display (value, unit) {
-  if (value !== 1) {
-    unit += 's';
-  }
-  return `${value} ${unit}`;
-}
+import {
+  display,
+  getCoord,
+  toDegrees,
+  toRadians,
+  toSquare,
+  translate
+} from '../../utils';
 
 function drawArc() {
   return d3
     .arc()
     .innerRadius((d) => d.radius * this.settings.scaleFactor)
     .outerRadius((d) => d.radius * this.settings.scaleFactor)
-    .startAngle((d) => this.toRadians(d.startAngle))
-    .endAngle((d) => this.toRadians(d.endAngle))
+    .startAngle((d) => toRadians(d.startAngle))
+    .endAngle((d) => toRadians(d.endAngle))
 }
 
 function drawLine() {
@@ -47,10 +40,6 @@ function getCenterMark() {
     startAngle: 0,
     endAngle: 360
   };
-}
-
-function getCoord(value) {
-  return Math.round(value / this.settings.scaleFactor);
 }
 
 function getCoords(marker) {
@@ -151,32 +140,16 @@ function getYAxis() {
     .tickSize(0);
 }
 
-function toDegrees(radians) {
-  return radians * (180 / Math.PI);
-}
-
-function toRadians(degrees) {
-  return degrees * (Math.PI / 180);
-}
-
-function toSquare(value) {
-  return value * value;
-}
-
 function transform() {
   let tx, ty;
   tx = ty = this.settings.perimeter * this.settings.scaleFactor;
-  return this.translate(tx, ty);
-}
-
-function translate(tx, ty) {
-  return `translate(${tx}, ${ty})`;
+  return translate(tx, ty);
 }
 
 function triangulateCoords(coords) {
 
   const getSideLength = (point1, point2) => {
-    return Math.sqrt(this.toSquare(point2[0] - point1[0]) + this.toSquare(point2[1] - point1[1])).toFixed(3);
+    return Math.sqrt(toSquare(point2[0] - point1[0]) + toSquare(point2[1] - point1[1])).toFixed(3);
   };
   const getSide = (id, point1, point2) => {
     return {
@@ -188,11 +161,11 @@ function triangulateCoords(coords) {
     return {
       id: id.toUpperCase(),
       radians: radians,
-      degrees: this.toDegrees(radians).toFixed(3)
+      degrees: toDegrees(radians).toFixed(3)
     };
   };
   const getAngle1 = (sides) => {
-    const numerator = (this.toSquare(sides[1].yards) + this.toSquare(sides[2].yards)) - this.toSquare(sides[0].yards);
+    const numerator = (toSquare(sides[1].yards) + toSquare(sides[2].yards)) - toSquare(sides[0].yards);
     const denominator = 2 * (sides[1].yards * sides[2].yards);
     const radians = Math.acos(numerator / denominator);
     return getAngle(sides[0].id, radians);
@@ -204,7 +177,7 @@ function triangulateCoords(coords) {
     return getAngle(sides[1].id, radians);
   };
   const getAngle3 = (sides, angle1, angle2) => {
-    const radians = this.toRadians(180) - (angle1.radians + angle2.radians);
+    const radians = toRadians(180) - (angle1.radians + angle2.radians);
     return getAngle(sides[2].id, radians);
   };
   const leftGoalPost = this.getGoalPosts()[0][0];
@@ -227,23 +200,7 @@ function triangulateCoords(coords) {
   };
 }
 
-export const _getPenaltyArcs = (i) => {
-  const radius = CONSTANTS.PENALTY_ARC_RADIUS;
-  return [
-    [
-      {radius: radius, startAngle: 37, endAngle: 143},
-      {radius: radius, startAngle: 323, endAngle: 217}
-    ],
-    [
-      {radius: radius, startAngle: 127, endAngle: 233},
-      {radius: radius, startAngle: 53, endAngle: -53}
-    ]
-  ][i];
-};
-
 export const basicPitch = {
-  convertLengthToPixels,
-  convertWidthToPixels,
   drawArc,
   drawLine,
   getCenterCircle,
@@ -259,10 +216,6 @@ export const basicPitch = {
   getTriangle,
   getXAxis,
   getYAxis,
-  toSquare,
-  toDegrees,
-  toRadians,
   transform,
-  translate,
   triangulateCoords
 };

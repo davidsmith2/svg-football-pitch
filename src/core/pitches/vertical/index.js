@@ -1,57 +1,14 @@
 import * as d3 from "d3";
 
 import * as CONSTANTS from '../../constants';
-import {_getPenaltyArcs} from '../basic';
-
-function getPenaltyArcs() {
-  return _getPenaltyArcs(1);
-}
-
-function transformCenterCircle() {
-  const tx = this.getMidwayLinePoint() * this.settings.scaleFactor;
-  const ty = this.getHalfwayLinePoint() * this.settings.scaleFactor;
-  return this.translate(tx, ty);
-}
-
-function transformCenterMark() {
-  const tx = this.getMidwayLinePoint() * this.settings.scaleFactor;
-  const ty = this.getHalfwayLinePoint() * this.settings.scaleFactor;
-  return this.translate(tx, ty);
-}
-
-function transformCornerArc(i) {
-  let tx;
-  let ty;
-  if (i === 0) {
-    tx = 0;
-    ty = 0;
-  }
-  if (i === 1) {
-    tx = this.settings.width * this.settings.scaleFactor;
-    ty = 0;
-  }
-  if (i === 2) {
-    tx = this.settings.width * this.settings.scaleFactor;
-    ty = this.settings.length * this.settings.scaleFactor;
-  }
-  if (i === 3) {
-    tx = 0;
-    ty = this.settings.length * this.settings.scaleFactor;
-  }
-  return this.translate(tx, ty);
-}
-
-function transformPenaltyArc(i) {
-  const tx = this.getMidwayLinePoint() * this.settings.scaleFactor;
-  const ty = this.getPenaltyMarkPoint(i) * this.settings.scaleFactor;
-  return this.translate(tx, ty);
-}
-
-function transformPenaltyMark(i) {
-  const tx = this.getMidwayLinePoint() * this.settings.scaleFactor;
-  const ty = this.getPenaltyMarkPoint(i) * this.settings.scaleFactor;
-  return this.translate(tx, ty);
-}
+import {} from '../basic';
+import {
+  convertWidthToPixels,
+  convertLengthToPixels,
+  _getPenaltyArcs,
+  toSquare,
+  translate
+} from '../../utils';
 
 function getGoalAreas() {
   const length = CONSTANTS.GOAL_AREA_LENGTH;
@@ -125,6 +82,18 @@ function getHalfwayLine() {
   ];
 }
 
+function getHeightInPixels() {
+  return convertWidthToPixels.call(this) + toSquare(this.settings.perimeter * this.settings.scaleFactor);
+}
+
+function getPenaltyArcs() {
+  const radius = CONSTANTS.PENALTY_ARC_RADIUS;
+  return [
+    {radius: radius, startAngle: 127, endAngle: 233},
+    {radius: radius, startAngle: 53, endAngle: -53}
+  ];
+}
+
 function getPenaltyAreas() {
   const length = CONSTANTS.PENALTY_AREA_LENGTH;
   const offset = CONSTANTS.PENALTY_AREA_OFFSET;
@@ -158,17 +127,7 @@ function getTouchLines() {
 }
 
 function getWidthInPixels() {
-  return this.convertLengthToPixels() + this.toSquare(this.settings.perimeter * this.settings.scaleFactor);
-}
-
-function getHeightInPixels() {
-  return this.convertWidthToPixels() + this.toSquare(this.settings.perimeter * this.settings.scaleFactor);
-}
-
-function inPlay(coords) {
-  const withinTouchLines = coords[0] > -1 && coords[0] <= this.settings.width;
-  const withinGoalLines = coords[1] > -1 && coords[1] <= this.settings.length;
-  return withinTouchLines && withinGoalLines;
+  return convertLengthToPixels.call(this) + toSquare(this.settings.perimeter * this.settings.scaleFactor);
 }
 
 function getXScale() {
@@ -185,23 +144,75 @@ function getYScale() {
     .range([0, this.getWidthInPixels()]);
 }
 
+function inPlay(coords) {
+  const withinTouchLines = coords[0] > -1 && coords[0] <= this.settings.width;
+  const withinGoalLines = coords[1] > -1 && coords[1] <= this.settings.length;
+  return withinTouchLines && withinGoalLines;
+}
+
+function transformCenterCircle() {
+  const tx = this.getMidwayLinePoint() * this.settings.scaleFactor;
+  const ty = this.getHalfwayLinePoint() * this.settings.scaleFactor;
+  return translate(tx, ty);
+}
+
+function transformCenterMark() {
+  const tx = this.getMidwayLinePoint() * this.settings.scaleFactor;
+  const ty = this.getHalfwayLinePoint() * this.settings.scaleFactor;
+  return translate(tx, ty);
+}
+
+function transformCornerArc(i) {
+  let tx;
+  let ty;
+  if (i === 0) {
+    tx = 0;
+    ty = 0;
+  }
+  if (i === 1) {
+    tx = this.settings.width * this.settings.scaleFactor;
+    ty = 0;
+  }
+  if (i === 2) {
+    tx = this.settings.width * this.settings.scaleFactor;
+    ty = this.settings.length * this.settings.scaleFactor;
+  }
+  if (i === 3) {
+    tx = 0;
+    ty = this.settings.length * this.settings.scaleFactor;
+  }
+  return translate(tx, ty);
+}
+
+function transformPenaltyArc(i) {
+  const tx = this.getMidwayLinePoint() * this.settings.scaleFactor;
+  const ty = this.getPenaltyMarkPoint(i) * this.settings.scaleFactor;
+  return translate(tx, ty);
+}
+
+function transformPenaltyMark(i) {
+  const tx = this.getMidwayLinePoint() * this.settings.scaleFactor;
+  const ty = this.getPenaltyMarkPoint(i) * this.settings.scaleFactor;
+  return translate(tx, ty);
+}
+
 export const verticalPitch = {
   getGoalAreas,
   getGoalLines,
   getGoalPosts,
   getGoals,
   getHalfwayLine,
+  getHeightInPixels,
   getPenaltyArcs,
   getPenaltyAreas,
   getTouchLines,
+  getWidthInPixels,
+  getXScale,
+  getYScale,
+  inPlay,
   transformCenterCircle,
   transformCenterMark,
   transformCornerArc,
   transformPenaltyArc,
-  transformPenaltyMark,
-  getWidthInPixels,
-  getHeightInPixels,
-  inPlay,
-  getXScale,
-  getYScale
+  transformPenaltyMark
 };
