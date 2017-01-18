@@ -4,7 +4,8 @@ import {
   setOrientation,
   setWidth,
   setLength,
-  setScaleFactor
+  setScaleFactor,
+  setMarker
 } from '../actions';
 import {App} from '../App';
 
@@ -14,7 +15,8 @@ const mapStateToProps = (state) => {
     orientation: state.orientation,
     width: state.width,
     length: state.length,
-    scaleFactor: state.scaleFactor
+    scaleFactor: state.scaleFactor,
+    marker: state.marker
   };
 };
 
@@ -36,6 +38,11 @@ const mapDispatchToProps = (dispatch) => {
     onScaleFactorChange: (event) => {
       console.log('dispatching action');
       dispatch(setScaleFactor(parseInt(event.target.value, 10)));
+    },
+    onMarkerChange: (func, event) => {
+      console.log('dispatching action');
+      event.preventDefault();
+      dispatch(setMarker(func(event)));
     }
   };
 };

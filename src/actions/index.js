@@ -2,6 +2,7 @@ const SET_ORIENTATION = 'SET_ORIENTATION';
 const SET_WIDTH = 'SET_WIDTH';
 const SET_LENGTH = 'SET_LENGTH';
 const SET_SCALE_FACTOR = 'SET_SCALE_FACTOR';
+const SET_MARKER = 'SET_MARKER';
 
 /**
  * Action creators
@@ -36,5 +37,12 @@ export const setScaleFactor = (scaleFactor) => {
   return {
     type: SET_SCALE_FACTOR,
     scaleFactor
+  };
+};
+
+export const setMarker = (marker) => {
+  return {
+    type: SET_MARKER,
+    marker: marker
   };
 };

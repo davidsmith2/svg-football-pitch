@@ -2,7 +2,11 @@ const initialState = {
   orientation: 'horizontal',
   length: 115,
   width: 73,
-  scaleFactor: 6
+  scaleFactor: 6,
+  marker: {
+    x: -2,
+    y: -2
+  }
 };
 
 export const svgFootballPitch = (state = initialState, action) => {
@@ -26,6 +30,11 @@ export const svgFootballPitch = (state = initialState, action) => {
       console.log(`calling reducer: ${action.type}`);
       return Object.assign({}, state, {
         scaleFactor: action.scaleFactor
+      });
+    case 'SET_MARKER':
+      console.log(`calling reducer: ${action.type}`);
+      return Object.assign({}, state, {
+        marker: action.marker
       });
     default:
       console.log(`calling reducer: default`);

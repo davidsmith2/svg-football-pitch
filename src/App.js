@@ -31,6 +31,8 @@ export const App = (props) => {
       />
       <Pitch
         pitchFactory={pitchFactory}
+        marker={props.marker}
+        onMarkerChange={props.onMarkerChange}
       />
     </div>
   );

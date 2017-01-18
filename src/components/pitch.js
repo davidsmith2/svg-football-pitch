@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import * as d3 from "d3";
+import {wrap} from 'lodash';
 
 import {styles} from '../styles';
 import {Lines} from './lines';
@@ -20,20 +21,8 @@ export class Pitch extends Component {
       pitchFactory: this.props.pitchFactory
     }
   }
-  constructor(props) {
-    super(props);
-    this.pitchFactory = this.props.pitchFactory;
-    this.state = {
-      marker: {
-        x: -2,
-        y: -2
-      }
-    };
-    this.handleClick = this.handleClick.bind(this);
-  }
   componentDidMount() {
     //this.d3();
-    this.pitchFactory = this.props.pitchFactory;
   }
   componentDidUpdate() {
     //this.d3();
@@ -47,55 +36,53 @@ export class Pitch extends Component {
       .select(this.refs.pitch)
       .call(axis);
   }
-  handleClick(e) {
-    e.preventDefault();
-    this.setState({
-      marker: this.pitchFactory.getCursorPoint(e)
-    });
-  }
   render() {
-    this.pitchFactory = this.props.pitchFactory;
-    const coords = this.pitchFactory.getCoords(this.state.marker);
-    const {scaleFactor} = this.pitchFactory.settings;
-    const {x, y} = this.state.marker;
+    const {pitchFactory, marker, onMarkerChange} = this.props;
+    const {scaleFactor} = pitchFactory.settings;
+    const coords = pitchFactory.getCoords(marker);
+    pitchFactory.getCursorPoint = pitchFactory.getCursorPoint.bind(pitchFactory);
     return (
-      <div id="pitch" onClick={this.handleClick} style={styles.pitch.container}>
+      <div
+        id="pitch"
+        onClick={wrap(pitchFactory.getCursorPoint, onMarkerChange)}
+        style={styles.pitch.container}
+      >
         <svg
           fill="transparent"
-          height={this.pitchFactory.getHeightInPixels()}
-          width={this.pitchFactory.getWidthInPixels()}
+          height={pitchFactory.getHeightInPixels()}
+          width={pitchFactory.getWidthInPixels()}
           style={styles.pitch.svg}
         >
           <g
             ref="pitch"
-            transform={this.pitchFactory.transform()}
+            transform={pitchFactory.transform()}
           >
             <Lines />
             <Arcs />
-            {this.pitchFactory.inPlay(coords) &&
+            {pitchFactory.inPlay(coords) &&
             <g>
               <ShotMarker
                 id="shot-marker"
                 r={scaleFactor}
                 fill='red'
-                cx={x}
-                cy={y}
+                cx={marker.x}
+                cy={marker.y}
               />
               <ShotTriangle
                 id="shot-triangle"
-                data={this.pitchFactory.getTriangle(coords)}
+                data={pitchFactory.getTriangle(coords)}
                 stroke="yellow"
               />
             </g>
             }
           </g>
         </svg>
-        {this.pitchFactory.inPlay(coords) &&
+        {pitchFactory.inPlay(coords) &&
         <ShotTooltip
           id="shot-tooltip"
           coords={coords}
-          data={this.pitchFactory.triangulateCoords(coords)}
-          style={this.pitchFactory.getTooltipPosition(coords)}
+          data={pitchFactory.triangulateCoords(coords)}
+          style={pitchFactory.getTooltipPosition(coords)}
         />
         }
       </div>
