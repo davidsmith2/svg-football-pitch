@@ -7,27 +7,24 @@ import {PitchFactory} from './core/pitches';
 import {styles} from './styles';
 
 export const App = (props) => {
-  console.log('orientation: ' + props.orientation);
-  console.log('length: ' + props.length);
-  console.log('width: ' + props.width);
-  console.log('scale factor: ' + props.scaleFactor);
+  const {orientation, scaleFactor, width, length} = props.pitch;
   const pitchFactory = PitchFactory({
-    orientation: props.orientation,
-    scaleFactor: props.scaleFactor,
-    width: props.width,
-    length: props.length
+    orientation: orientation,
+    scaleFactor: scaleFactor,
+    width: width,
+    length: length
   });
   return (
     <div style={styles.app}>
       <Controls
-        orientation={props.orientation}
-        onOrientationChange={props.onOrientationChange}
-        width={props.width}
-        onWidthChange={props.onWidthChange}
-        length={props.length}
+        length={length}
+        orientation={orientation}
+        scaleFactor={scaleFactor}
+        width={width}
         onLengthChange={props.onLengthChange}
-        scaleFactor={props.scaleFactor}
+        onOrientationChange={props.onOrientationChange}
         onScaleFactorChange={props.onScaleFactorChange}
+        onWidthChange={props.onWidthChange}
       />
       <Pitch
         pitchFactory={pitchFactory}

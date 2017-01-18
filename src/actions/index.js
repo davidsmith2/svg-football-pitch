@@ -43,6 +43,6 @@ export const setScaleFactor = (scaleFactor) => {
 export const setMarker = (marker) => {
   return {
     type: SET_MARKER,
-    marker: marker
+    marker
   };
 };
