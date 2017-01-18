@@ -93,6 +93,7 @@ export class Pitch extends Component {
         {this.pitchFactory.inPlay(coords) &&
         <ShotTooltip
           id="shot-tooltip"
+          coords={coords}
           data={this.pitchFactory.triangulateCoords(coords)}
           style={this.pitchFactory.getTooltipPosition(coords)}
         />

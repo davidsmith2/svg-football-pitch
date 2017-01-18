@@ -19,19 +19,6 @@ export function convertWidthToPixels() {
 /**
  * @private
  * @param value
- * @param unit
- * @returns {string}
- */
-export function display (value, unit) {
-  if (value !== 1) {
-    unit += 's';
-  }
-  return `${value} ${unit}`;
-}
-
-/**
- * @private
- * @param value
  * @returns {number}
  */
 export function getCoord(value) {

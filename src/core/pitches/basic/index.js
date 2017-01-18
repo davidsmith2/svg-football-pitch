@@ -2,13 +2,11 @@ import * as d3 from "d3";
 
 import * as CONSTANTS from '../../constants';
 import {
-  display,
   getCoord,
-  toDegrees,
   toRadians,
-  toSquare,
   translate
 } from '../../utils';
+import triangulator from '../../triangulator';
 
 function drawArc() {
   return d3
@@ -147,57 +145,13 @@ function transform() {
 }
 
 function triangulateCoords(coords) {
-
-  const getSideLength = (point1, point2) => {
-    return Math.sqrt(toSquare(point2[0] - point1[0]) + toSquare(point2[1] - point1[1])).toFixed(3);
-  };
-  const getSide = (id, point1, point2) => {
-    return {
-      id: id,
-      yards: getSideLength(point1, point2)
-    };
-  };
-  const getAngle = (id, radians) => {
-    return {
-      id: id.toUpperCase(),
-      radians: radians,
-      degrees: toDegrees(radians).toFixed(3)
-    };
-  };
-  const getAngle1 = (sides) => {
-    const numerator = (toSquare(sides[1].yards) + toSquare(sides[2].yards)) - toSquare(sides[0].yards);
-    const denominator = 2 * (sides[1].yards * sides[2].yards);
-    const radians = Math.acos(numerator / denominator);
-    return getAngle(sides[0].id, radians);
-  };
-  const getAngle2 = (sides, angle1)  => {
-    const numerator = sides[1].yards * Math.sin(angle1.radians);
-    const denominator = sides[0].yards;
-    const radians = Math.asin(numerator / denominator);
-    return getAngle(sides[1].id, radians);
-  };
-  const getAngle3 = (sides, angle1, angle2) => {
-    const radians = toRadians(180) - (angle1.radians + angle2.radians);
-    return getAngle(sides[2].id, radians);
-  };
-  const leftGoalPost = this.getGoalPosts()[0][0];
-  const rightGoalPost = this.getGoalPosts()[0][1];
-  const sideA = getSide('a', leftGoalPost, rightGoalPost);
-  const sideB = getSide('b', rightGoalPost, coords);
-  const sideC = getSide('c', leftGoalPost, coords);
-  const sides = [sideA, sideB, sideC].sort((a, b) => b.yards > a.yards);
-  const angle1 = getAngle1(sides);
-  const angle2 = getAngle2(sides, angle1);
-  const angle3 = getAngle3(sides, angle1, angle2);
-  const nearPost = (sideB.yards <= sideC.yards) ? sideB.yards : sideC.yards;
-  const farPost = (sideB.yards >= sideC.yards) ? sideB.yards : sideC.yards;
-  const angle = [angle1, angle2, angle3].find((angle) => angle.id === 'A').degrees;
-  return {
-    coords: coords,
-    nearPost: display(nearPost, 'yard'),
-    farPost: display(farPost, 'yard'),
-    angle: display(angle, 'degree')
-  };
+  const sides = triangulator.getSides([this.getGoalPosts()[0][0], this.getGoalPosts()[0][1], coords]);
+  const angles = triangulator.getAngles(sides.sort((a, b) => b.yards > a.yards));
+  return Object.assign(
+    {},
+    triangulator.getDistanceToPosts(sides),
+    triangulator.getAngleToGoal(angles)
+  );
 }
 
 export const basicPitch = {

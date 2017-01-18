@@ -4,6 +4,19 @@ import {Line} from './line';
 import {styles} from '../styles';
 
 /**
+ * Should value be expressed in singular or plural?
+ * @param value
+ * @param unit
+ * @returns {string}
+ */
+function format(value, unit) {
+  if (value !== 1) {
+    unit += 's';
+  }
+  return `${value} ${unit}`;
+}
+
+/**
  Shot marker
  */
 export const ShotMarker = (props) => <circle {...props} />;
@@ -22,15 +35,14 @@ export const ShotTooltip = (props) => {
     <div id={props.id} style={style}>
       <dl>
         <dt>Coordinates</dt>
-        <dd>{props.data.coords.join(', ')}</dd>
+        <dd>{props.coords.join(', ')}</dd>
         <dt>Near post</dt>
-        <dd>{props.data.nearPost}</dd>
+        <dd>{format(props.data.nearPost, 'yard')}</dd>
         <dt>Far post</dt>
-        <dd>{props.data.farPost}</dd>
+        <dd>{format(props.data.farPost, 'yard')}</dd>
         <dt>Angle</dt>
-        <dd>{props.data.angle}</dd>
+        <dd>{format(props.data.angle, 'degree')}</dd>
       </dl>
     </div>
   );
 };
-
