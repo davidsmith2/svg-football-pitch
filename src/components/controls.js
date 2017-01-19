@@ -13,8 +13,8 @@ export const Controls = (props) => {
               name="orientation"
               type="radio"
               value="vertical"
-              onChange={props.onOrientationChange}
-              defaultChecked={props.orientation === 'vertical'}
+              onChange={props.data.onOrientationChange}
+              defaultChecked={props.data.pitch.orientation === 'vertical'}
             />
             Vertical
           </label>
@@ -23,8 +23,8 @@ export const Controls = (props) => {
               name="orientation"
               type="radio"
               value="horizontal"
-              onChange={props.onOrientationChange}
-              defaultChecked={props.orientation === 'horizontal'}
+              onChange={props.data.onOrientationChange}
+              defaultChecked={props.data.pitch.orientation === 'horizontal'}
             />
             Horizontal
           </label>
@@ -36,8 +36,8 @@ export const Controls = (props) => {
             <input
               name="length"
               type="text"
-              value={props.length}
-              onChange={props.onLengthChange}
+              value={props.data.pitch.length}
+              onChange={props.data.onLengthChange}
             />
           </label>
           <label>
@@ -45,8 +45,8 @@ export const Controls = (props) => {
             <input
               name="width"
               type="text"
-              value={props.width}
-              onChange={props.onWidthChange}
+              value={props.data.pitch.width}
+              onChange={props.data.onWidthChange}
             />
           </label>
         </fieldset>
@@ -56,8 +56,8 @@ export const Controls = (props) => {
             Factor
             <select
               name="scaleFactor"
-              value={props.scaleFactor}
-              onChange={props.onScaleFactorChange}
+              value={props.data.pitch.scaleFactor}
+              onChange={props.data.onScaleFactorChange}
             >
               <option value="2">2</option>
               <option value="4">4</option>
