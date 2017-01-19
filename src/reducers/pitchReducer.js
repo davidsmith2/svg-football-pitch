@@ -2,7 +2,7 @@ const initialState = {
   orientation: 'horizontal',
   length: 115,
   width: 73,
-  scaleFactor: 6
+  scaleFactor: 2
 };
 
 export default function pitch(state = initialState, action) {

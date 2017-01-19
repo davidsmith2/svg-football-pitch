@@ -30,7 +30,7 @@ export const ShotTriangle = (props) => <Line {...props} />;
  Shot tooltip
  */
 export const ShotTooltip = (props) => {
-  const style = Object.assign({}, styles.tooltip, props.style);
+  const style = Object.assign({}, styles.pitch.image.tooltip, props.style);
   return (
     <div id={props.id} style={style}>
       <dl>

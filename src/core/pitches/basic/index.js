@@ -42,8 +42,8 @@ function getCenterMark() {
 
 function getCoords(marker) {
   return [
-    getCoord.call(this, marker.x),
-    getCoord.call(this, marker.y)
+    getCoord.call(this, marker[0]),
+    getCoord.call(this, marker[1])
   ]
 }
 
@@ -58,12 +58,17 @@ function getCornerArcs() {
 }
 
 function getCursorPoint(event) {
-  const offset = this.settings.perimeter * this.settings.scaleFactor;
+  const {perimeter, scaleFactor} = this.settings;
+  const offset = perimeter * scaleFactor;
   const svg = document.querySelector('svg');
   const pt = svg.createSVGPoint();
   pt.x = event.clientX - offset;
   pt.y = event.clientY - offset;
-  return pt.matrixTransform(svg.getScreenCTM().inverse());
+  const {x, y} = pt.matrixTransform(svg.getScreenCTM().inverse());
+  return {
+    scaled: [x, y].map((value) => Math.round(value)),
+    unscaled: [x, y].map((value) => Math.round(value / scaleFactor))
+  };
 }
 
 /**
@@ -124,18 +129,16 @@ function getTriangle(coords) {
 
 function getXAxis() {
   return d3
-    .axisLeft()
+    .axisTop()
     .scale(this.getXScale())
-    .tickFormat('')
-    .tickSize(0);
+    .tickSize(5);
 }
 
 function getYAxis() {
   return d3
-    .axisTop()
+    .axisLeft()
     .scale(this.getYScale())
-    .tickFormat('')
-    .tickSize(0);
+    .tickSize(5);
 }
 
 function transform() {

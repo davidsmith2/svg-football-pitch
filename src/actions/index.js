@@ -41,6 +41,7 @@ export const setScaleFactor = (scaleFactor) => {
 };
 
 export const setMarker = (marker) => {
+  console.log(`calling action creator: ${SET_MARKER}`);
   return {
     type: SET_MARKER,
     marker

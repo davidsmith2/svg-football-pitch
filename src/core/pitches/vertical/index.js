@@ -1,12 +1,8 @@
 import * as d3 from "d3";
+import {multiply} from 'lodash';
 
 import * as CONSTANTS from '../../constants';
-import {} from '../basic';
-import {
-  convertWidthToPixels,
-  convertLengthToPixels,
-  translate
-} from '../../utils';
+import {translate} from '../../utils';
 
 function getGoalAreas() {
   const length = CONSTANTS.GOAL_AREA_LENGTH;
@@ -81,8 +77,8 @@ function getHalfwayLine() {
 }
 
 function getHeightInPixels() {
-  // 460 + 25 * 4 = 460 + 100 = 560
-  return convertLengthToPixels.call(this) + ((this.settings.perimeter * 2) * this.settings.scaleFactor);
+  const {length, perimeter, scaleFactor} = this.settings;
+  return (multiply(length, scaleFactor)) + ((perimeter * 2) * scaleFactor);
 }
 
 function getPenaltyArcs() {
@@ -126,22 +122,24 @@ function getTouchLines() {
 }
 
 function getWidthInPixels() {
-  // 292 + 25 * 4 = 292 + 100 = 392
-  return convertWidthToPixels.call(this) + ((this.settings.perimeter * 2) * this.settings.scaleFactor);
+  const {width, perimeter, scaleFactor} = this.settings;
+  return (multiply(width, scaleFactor)) + ((perimeter * 2) * scaleFactor);
 }
 
 function getXScale() {
+  const {width, scaleFactor} = this.settings;
   return d3
     .scaleLinear()
-    .domain([0, this.settings.length])
-    .range([0, this.convertLengthToPixels()]);
+    .domain([0, width])
+    .range([0, multiply(width, scaleFactor)]);
 }
 
 function getYScale() {
+  const {length, scaleFactor} = this.settings;
   return d3
     .scaleLinear()
-    .domain([0, this.settings.width])
-    .range([0, this.getWidthInPixels()]);
+    .domain([0, length])
+    .range([0, multiply(length, scaleFactor)]);
 }
 
 function inPlay(coords) {
