@@ -91,19 +91,16 @@ const getAngleToGoal = (angles) => {
  * @returns {{nearPost: string, farPost: string}}
  */
 const getDistanceToPosts = (sides) => {
-  let distanceToNearPost;
-  let distanceToFarPost;
+  let nearPost;
+  let farPost;
   if (sides[1].yards <= sides[2].yards) {
-    distanceToNearPost = sides[1].yards;
-    distanceToFarPost = sides[2].yards;
+    nearPost = sides[1].yards;
+    farPost = sides[2].yards;
   } else {
-    distanceToNearPost = sides[2].yards;
-    distanceToFarPost = sides[1].yards;
+    nearPost = sides[2].yards;
+    farPost = sides[1].yards;
   }
-  return {
-    nearPost: distanceToNearPost,
-    farPost: distanceToFarPost
-  };
+  return {nearPost, farPost};
 };
 
 /**

@@ -149,7 +149,8 @@ function transform() {
 
 function triangulateCoords(coords) {
   const sides = triangulator.getSides([this.getGoalPosts()[0][0], this.getGoalPosts()[0][1], coords]);
-  const angles = triangulator.getAngles(sides.sort((a, b) => b.yards > a.yards));
+  const sidesByLength = sides.slice().sort((a, b) => b.yards > a.yards);
+  const angles = triangulator.getAngles(sidesByLength);
   return Object.assign(
     {},
     triangulator.getDistanceToPosts(sides),
