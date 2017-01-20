@@ -11,6 +11,7 @@ import {ShotTriangle} from './shot';
 export const Image = (props) => {
   const {marker, onMarkerChange, pitch} = props.data;
   const pitchFactory = props.pitchFactory;
+  console.log(pitch);
   pitchFactory.getCursorPoint = pitchFactory.getCursorPoint.bind(pitchFactory);
   return (
     <div
@@ -32,8 +33,8 @@ export const Image = (props) => {
           {pitchFactory.inPlay(marker.activeMarker.unscaled) &&
           <g>
             <ShotMarker
-              cx={marker.activeMarker.scaled[0]}
-              cy={marker.activeMarker.scaled[1]}
+              cx={marker.activeMarker.unscaled[0] * pitch.scaleFactor}
+              cy={marker.activeMarker.unscaled[1] * pitch.scaleFactor}
               fill='red'
               id="shot-marker"
               r={pitch.scaleFactor}

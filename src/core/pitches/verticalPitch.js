@@ -1,8 +1,8 @@
-import * as d3 from "d3";
+import * as d3 from 'd3';
 import {multiply} from 'lodash';
 
-import * as CONSTANTS from '../../constants';
-import {translate} from '../../utils';
+import * as CONSTANTS from '../constants';
+import {translate} from '../utils';
 
 function getGoalAreas() {
   const length = CONSTANTS.GOAL_AREA_LENGTH;

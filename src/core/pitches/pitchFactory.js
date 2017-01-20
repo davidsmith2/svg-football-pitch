@@ -1,6 +1,6 @@
-import {basicPitch} from './basic';
-import {horizontalPitch} from './horizontal';
-import {verticalPitch} from './vertical';
+import {basicPitch} from './basicPitch';
+import {horizontalPitch} from './horizontalPitch';
+import {verticalPitch} from './verticalPitch';
 
 const pitches = {
   basic: basicPitch,

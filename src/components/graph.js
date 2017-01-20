@@ -1,22 +1,13 @@
 import React, { Component } from 'react';
-import * as d3 from 'd3';
 import {wrap} from 'lodash';
-
-import {styles} from '../styles';
 
 export class Graph extends Component {
   componentDidMount() {
     this.renderAxes();
   }
   renderAxes() {
-    // set the ranges
-    this.renderAxis('x-axis', this.props.pitchFactory.getXAxis());
-    this.renderAxis('y-axis', this.props.pitchFactory.getYAxis());
-  }
-  renderAxis(axisType, axis) {
-    d3
-      .select(this.refs[axisType])
-      .call(axis);
+    this.props.pitchFactory.drawAxis(this.refs['x-axis'], 'x');
+    this.props.pitchFactory.drawAxis(this.refs['y-axis'], 'y');
   }
   render() {
     const {marker, onMarkerChange, pitch} = this.props.data;
@@ -27,7 +18,7 @@ export class Graph extends Component {
         <svg
           height={pitchFactory.getHeightInPixels()}
           ref="graph"
-          style={styles.pitch.graph.svg}
+          style={{padding: pitchFactory.settings.perimeter * pitch.scaleFactor}}
           width={pitchFactory.getWidthInPixels()}
         >
           <g>
@@ -35,8 +26,8 @@ export class Graph extends Component {
               if (pitchFactory.inPlay(obj.unscaled)) {
                 return (
                   <circle
-                    cx={obj.scaled[0]}
-                    cy={obj.scaled[1]}
+                    cx={obj.unscaled[0] * pitch.scaleFactor}
+                    cy={obj.unscaled[1] * pitch.scaleFactor}
                     key={`shot-marker-${i}`}
                     onClick={wrap(() => obj, onMarkerChange)}
                     r={pitch.scaleFactor}

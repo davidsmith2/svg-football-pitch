@@ -1,9 +1,13 @@
 import React, { Component } from 'react';
+import Container from 'muicss/lib/react/container';
+import Row from 'muicss/lib/react/row';
+import Col from 'muicss/lib/react/col';
 
-import {PitchFactory} from '../core/pitches';
-import {styles} from '../styles';
-import {Graph} from './graph';
+import {PitchFactory} from '../core/pitches/pitchFactory';
 import {Image} from './image';
+import {Graph} from './graph';
+//import {Controls} from './controls';
+//import {styles} from '../styles';
 
 /**
  Pitch
@@ -18,16 +22,20 @@ export class Pitch extends Component {
     }
   }
   render() {
-    this.pitchFactory = PitchFactory(this.props.data.pitch);
+    this.pitchFactory = PitchFactory(this.props.pitch);
     return (
-      <div style={styles.pitch.container}>
-        <div style={{float: 'left'}}>
-          <Image data={this.props.data} pitchFactory={this.pitchFactory} />
-        </div>
-        <div style={{float: 'right'}}>
-          <Graph data={this.props.data} pitchFactory={this.pitchFactory} />
-        </div>
-      </div>
+      <Container fluid={true}>
+        <Row style={{marginBottom: 20}}>
+          <Col sm="12">
+            <Image data={this.props} pitchFactory={this.pitchFactory} />
+          </Col>
+        </Row>
+        <Row style={{marginBottom: 20}}>
+          <Col sm="12">
+            <Graph data={this.props} pitchFactory={this.pitchFactory} />
+          </Col>
+        </Row>
+      </Container>
     );
   }
 }

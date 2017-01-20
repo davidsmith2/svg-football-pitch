@@ -1,12 +1,12 @@
-import * as d3 from "d3";
+import * as d3 from 'd3';
 
-import * as CONSTANTS from '../../constants';
+import * as CONSTANTS from '../constants';
 import {
   getCoord,
   toRadians,
   translate
-} from '../../utils';
-import triangulator from '../../triangulator';
+} from '../utils';
+import triangulator from '../triangulator';
 
 function drawArc() {
   return d3
@@ -15,6 +15,13 @@ function drawArc() {
     .outerRadius((d) => d.radius * this.settings.scaleFactor)
     .startAngle((d) => toRadians(d.startAngle))
     .endAngle((d) => toRadians(d.endAngle))
+}
+
+function drawAxis(selector, axisType) {
+  const getAxis = (axisType === 'x') ? getXAxis : getYAxis;
+  return d3
+    .select(selector)
+    .call(getAxis.call(this));
 }
 
 function drawLine() {
@@ -160,6 +167,7 @@ function triangulateCoords(coords) {
 
 export const basicPitch = {
   drawArc,
+  drawAxis,
   drawLine,
   getCenterCircle,
   getCenterMark,
@@ -172,8 +180,6 @@ export const basicPitch = {
   getPenaltyMarkPoint,
   getTooltipPosition,
   getTriangle,
-  getXAxis,
-  getYAxis,
   transform,
   triangulateCoords
 };

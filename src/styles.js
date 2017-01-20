@@ -1,12 +1,11 @@
+export const breakpoints = {
+  'sm': 576,
+  'md': 768,
+  'lg': 992,
+  'xl': 1200
+};
+
 export const styles = {
-  app: {
-    margin: '0 auto',
-    padding: '1em',
-    width: '75%'
-  },
-  controls: {
-    padding: '1em',
-  },
   pitch: {
     container: {
       marginTop: '1em',
@@ -29,9 +28,10 @@ export const styles = {
       }
     },
     graph: {
-      container: {},
+      container: {
+        margin: '0 auto'
+      },
       svg: {
-        padding: '1em 2em'
       }
     }
   }
