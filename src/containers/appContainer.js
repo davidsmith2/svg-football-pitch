@@ -8,7 +8,8 @@ const mapStateToProps = (state) => {
   console.log('mapping state to props');
   return {
     pitch: state.pitch,
-    marker: state.marker
+    marker: state.marker,
+    tabs: state.tabs
   };
 };
 
@@ -37,6 +38,10 @@ const mapDispatchToProps = (dispatch) => {
       console.log('dispatching action: marker change');
       event.preventDefault();
       boundActionCreators.setMarker(func(event));
+    },
+    onTabChange: () => {
+      console.log('dispatching action: tab change');
+      boundActionCreators.setTab(event);
     }
   };
 };

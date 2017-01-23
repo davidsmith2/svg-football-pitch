@@ -36,6 +36,8 @@ export class App extends Component {
         marker={this.props.marker}
         onMarkerChange={this.props.onMarkerChange}
         pitch={Object.assign({}, this.props.pitch, {scaleFactor})}
+        tabs={this.props.tabs}
+        onTabChange={this.props.onTabChange}
       />
     );
   }

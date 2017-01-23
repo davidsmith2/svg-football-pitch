@@ -3,6 +3,7 @@ const SET_WIDTH = 'SET_WIDTH';
 const SET_LENGTH = 'SET_LENGTH';
 const SET_SCALE_FACTOR = 'SET_SCALE_FACTOR';
 const SET_MARKER = 'SET_MARKER';
+const SET_TAB = 'SET_TAB';
 
 /**
  * Action creators
@@ -45,5 +46,13 @@ export const setMarker = (marker) => {
   return {
     type: SET_MARKER,
     marker
+  };
+};
+
+export const setTab = (key) => {
+  console.log(`calling action creator: ${SET_TAB}`);
+  return {
+    type: SET_TAB,
+    key
   };
 };

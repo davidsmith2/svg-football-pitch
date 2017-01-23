@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
-import Container from 'muicss/lib/react/container';
-import Row from 'muicss/lib/react/row';
-import Col from 'muicss/lib/react/col';
+import Col from 'react-bootstrap/lib/Col';
+import Grid from 'react-bootstrap/lib/Grid';
+import Row from 'react-bootstrap/lib/Row';
+import Tab from 'react-bootstrap/lib/Tab';
+import Tabs from 'react-bootstrap/lib/Tabs';
 
 import {PitchFactory} from '../core/pitches/pitchFactory';
 import {Image} from './image';
@@ -24,18 +26,34 @@ export class Pitch extends Component {
   render() {
     this.pitchFactory = PitchFactory(this.props.pitch);
     return (
-      <Container fluid={true}>
-        <Row style={{marginBottom: 20}}>
-          <Col sm="12">
-            <Image data={this.props} pitchFactory={this.pitchFactory} />
+      <Grid>
+        <Row>
+          <Col sm={12}>
+            <Tabs
+              defaultActiveKey={this.props.tabs.activeTab}
+              id="tabs"
+              onSelect={this.props.onTabChange}
+            >
+              <Tab
+                eventKey={1}
+                title="Image">
+                <Image
+                  data={this.props}
+                  pitchFactory={this.pitchFactory}
+                />
+              </Tab>
+              <Tab
+                eventKey={2}
+                title="Graph">
+                <Graph
+                  data={this.props}
+                  pitchFactory={this.pitchFactory}
+                />
+              </Tab>
+            </Tabs>
           </Col>
         </Row>
-        <Row style={{marginBottom: 20}}>
-          <Col sm="12">
-            <Graph data={this.props} pitchFactory={this.pitchFactory} />
-          </Col>
-        </Row>
-      </Container>
+      </Grid>
     );
   }
 }
