@@ -87,9 +87,7 @@ export class Tabs extends Component {
           <div style={{padding: '1em'}}>
             <div>
               <ul>
-                <li>Click on the image to find the angle the goal.</li>
-                <li>Click outside the touchlines/goal lines to dismiss the popover.</li>
-                <li>Switch to the graph tab to see your plotted clicks.</li>
+                <li>Click on a plot point then switch to the image tab to see it reflected on the pitch.</li>
               </ul>
             </div>
             <div>
@@ -106,7 +104,9 @@ export class Tabs extends Component {
           <div style={{padding: '1em'}}>
             <div>
               <ul>
-                <li>Click on a plot point then switch to the image tab to see it reflected on the pitch.</li>
+                <li>Click on the image to find the angle the goal.</li>
+                <li>Click outside the touchlines/goal lines to dismiss the popover.</li>
+                <li>Switch to the graph tab to see your plotted clicks.</li>
               </ul>
             </div>
             <div>
