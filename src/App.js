@@ -4,7 +4,7 @@ import {partial} from 'lodash';
 
 import './App.css';
 import {breakpoints} from './styles';
-import {Pitch} from './components/pitch';
+import {Tabs} from './components/tabs';
 
 export class App extends Component {
   constructor(props) {
@@ -30,18 +30,18 @@ export class App extends Component {
     );
   }
   renderPitch(scaleFactor, matches) {
-    console.log(`scale factor: ${scaleFactor}:${matches}`);
     return (
-      matches && <Pitch
+      matches && <Tabs
         marker={this.props.marker}
         onMarkerChange={this.props.onMarkerChange}
         pitch={Object.assign({}, this.props.pitch, {scaleFactor})}
         tabs={this.props.tabs}
         onTabChange={this.props.onTabChange}
+        tab={this.props.params.tab}
       />
     );
   }
   getScaleFactor(breakpoint) {
-    return Math.floor(breakpoint / this.props.pitch.length);
+    return Math.floor((breakpoint / this.props.pitch.length) - 1);
   }
 }

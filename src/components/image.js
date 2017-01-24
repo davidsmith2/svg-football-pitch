@@ -11,7 +11,6 @@ import {ShotTriangle} from './shot';
 export const Image = (props) => {
   const {marker, onMarkerChange, pitch} = props.data;
   const pitchFactory = props.pitchFactory;
-  console.log(pitch);
   pitchFactory.getCursorPoint = pitchFactory.getCursorPoint.bind(pitchFactory);
   return (
     <div

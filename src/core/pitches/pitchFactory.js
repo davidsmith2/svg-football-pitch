@@ -23,6 +23,5 @@ export const PitchFactory = (options) => {
     pitches.basic,
     pitches[settings.orientation]
   );
-  console.log(pitch);
   return pitch;
 };

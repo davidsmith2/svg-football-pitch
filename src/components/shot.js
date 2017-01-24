@@ -38,7 +38,7 @@ export const ShotTooltip = (props) => {
         placement="right"
         positionLeft={props.style.left}
         positionTop={props.style.top - 30}
-        title={<h5>{props.coords.join(', ')}</h5>}
+        title={props.coords.join(', ')}
       >
         <p>
           <strong>Near post:</strong> {format(props.data.nearPost, 'yard')}
