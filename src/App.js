@@ -30,9 +30,11 @@ export class App extends Component {
     );
   }
   renderPitch(scaleFactor, matches) {
+    const {x, y} = this.props.location.query;
+    const activeMarker = [x, y];
     return (
       matches && <Tabs
-        marker={this.props.marker}
+        marker={Object.assign({}, this.props.marker, {activeMarker})}
         onMarkerChange={this.props.onMarkerChange}
         pitch={Object.assign({}, this.props.pitch, {scaleFactor})}
         tabs={this.props.tabs}

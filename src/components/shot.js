@@ -1,5 +1,6 @@
 import React from 'react';
 import Popover from 'react-bootstrap/lib/Popover';
+import {Link} from 'react-router';
 
 import {Line} from './line';
 
@@ -19,17 +20,25 @@ function format(value, unit) {
 /**
  Shot marker
  */
-export const ShotMarker = (props) => <circle {...props} />;
+export const Marker = (props) => <circle {...props} />;
 
 /**
  Shot triangle
  */
-export const ShotTriangle = (props) => <Line {...props} />;
+export const Angle = (props) => <Line {...props} />;
 
 /**
  Shot tooltip
  */
-export const ShotTooltip = (props) => {
+export const Tooltip = (props) => {
+  const title = props.activeMarker.slice().join(', ');
+  const link = {
+    pathname: props.linkPathname,
+    query: {
+      x: props.activeMarker[0],
+      y: props.activeMarker[1]
+    }
+  };
   return (
     <div>
       <Popover
@@ -38,7 +47,7 @@ export const ShotTooltip = (props) => {
         placement="right"
         positionLeft={props.style.left}
         positionTop={props.style.top - 30}
-        title={props.coords.join(', ')}
+        title={title}
       >
         <p>
           <strong>Near post:</strong> {format(props.data.nearPost, 'yard')}
@@ -49,6 +58,7 @@ export const ShotTooltip = (props) => {
         <p>
           <strong>Angle:</strong> {format(props.data.angle, 'degree')}
         </p>
+        <Link to={link}>{props.linkTitle}</Link>
       </Popover>
     </div>
   );

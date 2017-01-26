@@ -42,11 +42,6 @@ export class Tabs extends Component {
         </Row>
         <Row>
           <Col sm={12}>
-            {this.renderTabs()}
-          </Col>
-        </Row>
-        <Row>
-          <Col sm={12}>
             {this.renderTabPanel()}
           </Col>
         </Row>
@@ -87,7 +82,8 @@ export class Tabs extends Component {
           <div style={{padding: '1em'}}>
             <div>
               <ul>
-                <li>Click on a plot point then switch to the image tab to see it reflected on the pitch.</li>
+                <li>Click on a plot point to find the angle to goal.</li>
+                <li>Click on "View on image" to return to the image.</li>
               </ul>
             </div>
             <div>
@@ -104,9 +100,9 @@ export class Tabs extends Component {
           <div style={{padding: '1em'}}>
             <div>
               <ul>
-                <li>Click on the image to find the angle the goal.</li>
+                <li>Click inside the touchlines/goal lines to find the angle the goal.</li>
+                <li>Click on "View on graph" to plot the coordinates on a graph.</li>
                 <li>Click outside the touchlines/goal lines to dismiss the popover.</li>
-                <li>Switch to the graph tab to see your plotted clicks.</li>
               </ul>
             </div>
             <div>

@@ -28,9 +28,12 @@ const mapDispatchToProps = (dispatch) => {
     onScaleFactorChange: (event) => {
       boundActionCreators.setScaleFactor(parseInt(event.target.value, 10));
     },
-    onMarkerChange: (func, event) => {
+    onMarkerChange: (func, router, event) => {
       event.preventDefault();
-      boundActionCreators.setMarker(func(event));
+      const cursorPoint = func(event);
+      const path = `/${router.params.tab}?x=${cursorPoint[0]}&y=${cursorPoint[1]}`;
+      router.push(path);
+      boundActionCreators.setMarker(cursorPoint);
     },
     onTabChange: () => {
       boundActionCreators.setTab(event);

@@ -1,64 +1,71 @@
 import React from 'react';
-import {wrap} from 'lodash';
+import {partial, wrap} from 'lodash';
 
 import {styles} from '../styles';
 import {Lines} from './lines';
 import {Arcs} from './arcs';
-import {ShotMarker} from './shot';
-import {ShotTooltip} from './shot';
-import {ShotTriangle} from './shot';
+import {
+  Angle,
+  Marker,
+  Tooltip
+} from './shot';
 
-export const Image = (props) => {
+export const Image = (props, context) => {
   const {marker, onMarkerChange, pitch} = props.data;
   const pitchFactory = props.pitchFactory;
   pitchFactory.getCursorPoint = pitchFactory.getCursorPoint.bind(pitchFactory);
   return (
     <div
-      id="pitch"
-      onClick={wrap(pitchFactory.getCursorPoint, onMarkerChange)}
+      id="image"
       style={styles.pitch.image.container}
     >
-      <svg
-        fill="transparent"
-        height={pitchFactory.getHeightInPixels()}
-        style={styles.pitch.image.svg}
-        width={pitchFactory.getWidthInPixels()}
+      <div
+        onClick={partial(wrap(pitchFactory.getCursorPoint, onMarkerChange), context.router)}
       >
-        <g
-          transform={pitchFactory.transform()}
+        <svg
+          fill="transparent"
+          height={pitchFactory.getHeightInPixels()}
+          style={styles.pitch.image.svg}
+          width={pitchFactory.getWidthInPixels()}
         >
-          <Lines />
-          <Arcs />
-          {pitchFactory.inPlay(marker.activeMarker.unscaled) &&
-          <g>
-            <ShotMarker
-              cx={marker.activeMarker.unscaled[0] * pitch.scaleFactor}
-              cy={marker.activeMarker.unscaled[1] * pitch.scaleFactor}
-              fill='red'
-              id="shot-marker"
-              r={pitch.scaleFactor}
-            />
-            <ShotTriangle
-              data={pitchFactory.getTriangle(marker.activeMarker.unscaled)}
-              id="shot-triangle"
-              stroke="yellow"
-            />
+          <g
+            transform={pitchFactory.transform()}
+          >
+            <Lines />
+            <Arcs />
+            {pitchFactory.inPlay(marker.activeMarker) &&
+            <g>
+              <Marker
+                cx={marker.activeMarker[0] * pitch.scaleFactor}
+                cy={marker.activeMarker[1] * pitch.scaleFactor}
+                fill='red'
+                id="shot-marker"
+                r={pitch.scaleFactor}
+              />
+              <Angle
+                data={pitchFactory.getTriangle(marker.activeMarker)}
+                id="shot-triangle"
+                stroke="yellow"
+              />
+            </g>
+            }
           </g>
-          }
-        </g>
-      </svg>
-      {pitchFactory.inPlay(marker.activeMarker.unscaled) &&
-      <ShotTooltip
-        coords={marker.activeMarker.unscaled}
-        data={pitchFactory.triangulateCoords(marker.activeMarker.unscaled)}
-        id="shot-tooltip"
-        style={pitchFactory.getTooltipPosition(marker.activeMarker.unscaled)}
-      />
+        </svg>
+      </div>
+      {pitchFactory.inPlay(marker.activeMarker) &&
+        <Tooltip
+          activeMarker={marker.activeMarker}
+          data={pitchFactory.triangulateCoords(marker.activeMarker)}
+          id="shot-tooltip"
+          linkPathname="/graph"
+          linkTitle="View on graph"
+          style={pitchFactory.getTooltipPosition(marker.activeMarker)}
+        />
       }
     </div>
   );
 };
 
 Image.contextTypes = {
-  pitchFactory: React.PropTypes.object.isRequired
+  router: React.PropTypes.object
 };

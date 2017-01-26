@@ -72,10 +72,7 @@ function getCursorPoint(event) {
   pt.x = event.clientX - offset;
   pt.y = event.clientY - offset;
   const {x, y} = pt.matrixTransform(svg.getScreenCTM().inverse());
-  return {
-    scaled: [x, y].map((value) => Math.round(value)),
-    unscaled: [x, y].map((value) => Math.round(value / scaleFactor))
-  };
+  return [x, y].map((value) => Math.round(value / scaleFactor));
 }
 
 /**
