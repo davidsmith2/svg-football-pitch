@@ -1,16 +1,11 @@
 import React, { Component } from 'react';
-import {partial} from 'lodash';
 
-import {styles} from '../styles';
 import {Tooltip} from './shot';
+import {styles} from '../styles';
 
 export class Graph extends Component {
   componentDidMount() {
     this.renderAxes();
-  }
-  renderAxes() {
-    this.props.pitchFactory.drawAxis(this.refs['x-axis'], 'x');
-    this.props.pitchFactory.drawAxis(this.refs['y-axis'], 'y');
   }
   render() {
     const {activeMarker, markers} = this.props.data;
@@ -37,7 +32,10 @@ export class Graph extends Component {
                       cx={obj[0] * scale}
                       cy={obj[1] * scale}
                       key={`shot-marker-${i}`}
-                      onClick={partial(this.props.clicky, obj)}
+                      onClick={(event) => {
+                        event.preventDefault();
+                        this.props.handleClick(obj)
+                      }}
                       r={scale}
                     />
                   );
@@ -64,8 +62,8 @@ export class Graph extends Component {
       </div>
     );
   }
+  renderAxes() {
+    this.props.pitchFactory.drawAxis(this.refs['x-axis'], 'x');
+    this.props.pitchFactory.drawAxis(this.refs['y-axis'], 'y');
+  }
 }
-
-Graph.contextTypes = {
-  router: React.PropTypes.object
-};

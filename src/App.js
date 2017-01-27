@@ -1,10 +1,10 @@
+import {partial} from 'lodash';
 import React, { Component } from 'react';
 import MediaQuery from 'react-responsive';
-import {partial} from 'lodash';
 
+import {Tabs} from './components/tabs';
 import './App.css';
 import {breakpoints} from './styles';
-import {Tabs} from './components/tabs';
 
 export class App extends Component {
   constructor(props) {
@@ -15,24 +15,24 @@ export class App extends Component {
     return (
       <div>
         <MediaQuery maxWidth={breakpoints.md - 1}>
-          {partial(this.renderTabs, this.getScaleFactor(breakpoints.sm))}
+          {partial(this.renderTabs, breakpoints.sm)}
         </MediaQuery>
         <MediaQuery minWidth={breakpoints.md} maxWidth={breakpoints.lg - 1}>
-          {partial(this.renderTabs, this.getScaleFactor(breakpoints.md))}
+          {partial(this.renderTabs, breakpoints.md)}
         </MediaQuery>
         <MediaQuery minWidth={breakpoints.lg} maxWidth={breakpoints.xl - 1}>
-          {partial(this.renderTabs, this.getScaleFactor(breakpoints.lg))}
+          {partial(this.renderTabs, breakpoints.lg)}
         </MediaQuery>
         <MediaQuery minWidth={breakpoints.xl}>
-          {partial(this.renderTabs, this.getScaleFactor(breakpoints.xl))}
+          {partial(this.renderTabs, breakpoints.xl)}
         </MediaQuery>
       </div>
     );
   }
-  renderTabs(scaleFactor, matches) {
+  renderTabs(breakpoint, matches) {
     const data = Object.assign({}, this.props, {
       activeMarker: this.getActiveMarker(),
-      scaleFactor
+      scaleFactor: this.getScaleFactor(breakpoint)
     });
     return (
       matches && <Tabs data={data} />

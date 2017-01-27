@@ -1,16 +1,15 @@
 import React from 'react';
-import {partial} from 'lodash';
 
-import {styles} from '../styles';
-import {Lines} from './lines';
 import {Arcs} from './arcs';
+import {Lines} from './lines';
 import {
   Angle,
   Marker,
   Tooltip
 } from './shot';
+import {styles} from '../styles';
 
-export const Image = (props, context) => {
+export const Image = (props) => {
   const {activeMarker} = props.data;
   const {scale} = props.data.location.query;
   const pitchFactory = props.pitchFactory;
@@ -21,7 +20,10 @@ export const Image = (props, context) => {
       style={styles.pitch.image.container}
     >
       <div
-        onClick={partial(props.clicky, false)}
+        onClick={(event) => {
+          event.preventDefault();
+          props.handleClick(pitchFactory.getCursorPoint(event))
+        }}
       >
         <svg
           fill="transparent"
@@ -66,8 +68,4 @@ export const Image = (props, context) => {
       }
     </div>
   );
-};
-
-Image.contextTypes = {
-  router: React.PropTypes.object
 };

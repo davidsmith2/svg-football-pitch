@@ -7,9 +7,9 @@ import NavItem from 'react-bootstrap/lib/NavItem';
 import Row from 'react-bootstrap/lib/Row';
 import {LinkContainer} from 'react-router-bootstrap';
 
-import {PitchFactory} from '../core/pitches/pitchFactory';
-import {Image} from './image';
 import {Graph} from './graph';
+import {Image} from './image';
+import {PitchFactory} from '../core/pitches/pitchFactory';
 
 export class Tabs extends Component {
   static childContextTypes = {
@@ -22,15 +22,13 @@ export class Tabs extends Component {
   }
   constructor(props) {
     super(props);
-    this.clicky = this.clicky.bind(this);
+    this.updateMarkerOnClick = this.updateMarkerOnClick.bind(this);
   }
   componentWillMount() {
     const {x, y} = this.props.data.location.query;
-    const path = `/image?scale=${Number(this.props.data.scaleFactor)}&x=${x}&y=${y}`;
-    this.context.router.push(path);
+    this.updateMarkerOnLoad([x ,y]);
   }
   render() {
-    this.pitchFactory = this.getPitchFactory();
     return (
       <Grid>
         <Row>
@@ -90,6 +88,7 @@ export class Tabs extends Component {
   }
   renderTabPanel() {
     let el;
+    this.pitchFactory = this.getPitchFactory();
     switch(this.props.data.params.tab) {
       case 'graph':
         el = (
@@ -104,7 +103,7 @@ export class Tabs extends Component {
               <Graph
                 data={this.props.data}
                 pitchFactory={this.pitchFactory}
-                clicky={this.clicky}
+                handleClick={this.updateMarkerOnClick}
               />
             </div>
           </div>
@@ -124,7 +123,7 @@ export class Tabs extends Component {
               <Image
                 data={this.props.data}
                 pitchFactory={this.pitchFactory}
-                clicky={this.clicky}
+                handleClick={this.updateMarkerOnClick}
               />
             </div>
           </div>
@@ -138,21 +137,26 @@ export class Tabs extends Component {
       scaleFactor: Number(scale)
     }));
   }
-  clicky(coords, event) {
-    let {scale} = this.props.data.location.query;
-    let x;
-    let y;
-    if (!coords) {
-      x = this.pitchFactory.getCursorPoint(event)[0];
-      y = this.pitchFactory.getCursorPoint(event)[1];
-    } else {
-      x = coords[0];
-      y = coords[1];
-    }
-    event.preventDefault();
-    const path = `/${this.context.router.params.tab}?x=${x}&y=${y}&scale=${scale}`;
+  updateMarkerOnLoad(coords) {
+    this.navigate({
+      tab: '/image',
+      scale: this.props.data.scaleFactor,
+      coords
+    });
+  }
+  updateMarkerOnClick(coords) {
+    this.navigate({
+      tab: this.context.router.params.tab,
+      scale: this.props.data.location.query.scale,
+      coords
+    })
+  }
+  navigate(options) {
+    const x = options.coords[0];
+    const y = options.coords[1];
+    const path = `${options.tab}?scale=${options.scale}&x=${x}&y=${y}`;
     this.context.router.push(path);
-    this.props.data.onMarkerChange([x,y])
+    this.props.data.onMarkerChange(options.coords);
   }
 };
 
