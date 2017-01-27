@@ -36,7 +36,8 @@ export const Tooltip = (props) => {
     pathname: props.linkPathname,
     query: {
       x: props.activeMarker[0],
-      y: props.activeMarker[1]
+      y: props.activeMarker[1],
+      scale: props.scale
     }
   };
   return (

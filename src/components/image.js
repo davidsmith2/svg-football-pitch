@@ -1,5 +1,5 @@
 import React from 'react';
-import {partial, wrap} from 'lodash';
+import {partial} from 'lodash';
 
 import {styles} from '../styles';
 import {Lines} from './lines';
@@ -11,7 +11,8 @@ import {
 } from './shot';
 
 export const Image = (props, context) => {
-  const {marker, onMarkerChange, pitch} = props.data;
+  const {activeMarker} = props.data;
+  const {scale} = props.data.location.query;
   const pitchFactory = props.pitchFactory;
   pitchFactory.getCursorPoint = pitchFactory.getCursorPoint.bind(pitchFactory);
   return (
@@ -20,7 +21,7 @@ export const Image = (props, context) => {
       style={styles.pitch.image.container}
     >
       <div
-        onClick={partial(wrap(pitchFactory.getCursorPoint, onMarkerChange), context.router)}
+        onClick={partial(props.clicky, false)}
       >
         <svg
           fill="transparent"
@@ -33,17 +34,17 @@ export const Image = (props, context) => {
           >
             <Lines />
             <Arcs />
-            {pitchFactory.inPlay(marker.activeMarker) &&
+            {pitchFactory.inPlay(activeMarker) &&
             <g>
               <Marker
-                cx={marker.activeMarker[0] * pitch.scaleFactor}
-                cy={marker.activeMarker[1] * pitch.scaleFactor}
+                cx={activeMarker[0] * scale}
+                cy={activeMarker[1] * scale}
                 fill='red'
                 id="shot-marker"
-                r={pitch.scaleFactor}
+                r={scale}
               />
               <Angle
-                data={pitchFactory.getTriangle(marker.activeMarker)}
+                data={pitchFactory.getTriangle(activeMarker)}
                 id="shot-triangle"
                 stroke="yellow"
               />
@@ -52,14 +53,15 @@ export const Image = (props, context) => {
           </g>
         </svg>
       </div>
-      {pitchFactory.inPlay(marker.activeMarker) &&
+      {pitchFactory.inPlay(activeMarker) &&
         <Tooltip
-          activeMarker={marker.activeMarker}
-          data={pitchFactory.triangulateCoords(marker.activeMarker)}
+          activeMarker={activeMarker}
+          data={pitchFactory.triangulateCoords(activeMarker)}
           id="shot-tooltip"
           linkPathname="/graph"
           linkTitle="View on graph"
-          style={pitchFactory.getTooltipPosition(marker.activeMarker)}
+          scale={scale}
+          style={pitchFactory.getTooltipPosition(activeMarker)}
         />
       }
     </div>

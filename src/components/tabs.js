@@ -20,8 +20,17 @@ export class Tabs extends Component {
       pitchFactory: this.pitchFactory
     }
   }
+  constructor(props) {
+    super(props);
+    this.clicky = this.clicky.bind(this);
+  }
+  componentWillMount() {
+    const {x, y} = this.props.data.location.query;
+    const path = `/image?scale=${Number(this.props.data.scaleFactor)}&x=${x}&y=${y}`;
+    this.context.router.push(path);
+  }
   render() {
-    this.pitchFactory = PitchFactory(this.props.pitch);
+    this.pitchFactory = this.getPitchFactory();
     return (
       <Grid>
         <Row>
@@ -42,6 +51,11 @@ export class Tabs extends Component {
         </Row>
         <Row>
           <Col sm={12}>
+            {this.renderTabs()}
+          </Col>
+        </Row>
+        <Row>
+          <Col sm={12}>
             {this.renderTabPanel()}
           </Col>
         </Row>
@@ -51,12 +65,12 @@ export class Tabs extends Component {
   renderTabs() {
     return (
       <Nav
-        activeKey={this.props.tabs.activeTab}
+        activeKey={this.props.data.tabs.activeTab}
         bsStyle="tabs"
         id="tabs"
-        onSelect={this.props.onTabChange}
+        onSelect={this.props.data.onTabChange}
       >
-        <LinkContainer to={{pathname: '/image'}}>
+        <LinkContainer to={{pathname: '/image', query: this.props.data.location.query}}>
           <NavItem
             eventKey={1}
             title="Image"
@@ -64,7 +78,7 @@ export class Tabs extends Component {
             Image
           </NavItem>
         </LinkContainer>
-        <LinkContainer to={{pathname: '/graph'}}>
+        <LinkContainer to={{pathname: '/graph', query: this.props.data.location.query}}>
           <NavItem
             eventKey={2}
             title="Graph">
@@ -76,7 +90,7 @@ export class Tabs extends Component {
   }
   renderTabPanel() {
     let el;
-    switch(this.props.tab) {
+    switch(this.props.data.params.tab) {
       case 'graph':
         el = (
           <div style={{padding: '1em'}}>
@@ -88,8 +102,9 @@ export class Tabs extends Component {
             </div>
             <div>
               <Graph
-                data={this.props}
+                data={this.props.data}
                 pitchFactory={this.pitchFactory}
+                clicky={this.clicky}
               />
             </div>
           </div>
@@ -107,8 +122,9 @@ export class Tabs extends Component {
             </div>
             <div>
               <Image
-                data={this.props}
+                data={this.props.data}
                 pitchFactory={this.pitchFactory}
+                clicky={this.clicky}
               />
             </div>
           </div>
@@ -116,4 +132,30 @@ export class Tabs extends Component {
     }
     return (<div>{el}</div>);
   }
+  getPitchFactory() {
+    const {scale} = this.props.data.location.query;
+    return PitchFactory(Object.assign({}, this.props.data.pitch, {
+      scaleFactor: Number(scale)
+    }));
+  }
+  clicky(coords, event) {
+    let {scale} = this.props.data.location.query;
+    let x;
+    let y;
+    if (!coords) {
+      x = this.pitchFactory.getCursorPoint(event)[0];
+      y = this.pitchFactory.getCursorPoint(event)[1];
+    } else {
+      x = coords[0];
+      y = coords[1];
+    }
+    event.preventDefault();
+    const path = `/${this.context.router.params.tab}?x=${x}&y=${y}&scale=${scale}`;
+    this.context.router.push(path);
+    this.props.data.onMarkerChange([x,y])
+  }
+};
+
+Tabs.contextTypes = {
+  router: React.PropTypes.object
 };

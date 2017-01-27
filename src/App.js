@@ -9,39 +9,38 @@ import {Tabs} from './components/tabs';
 export class App extends Component {
   constructor(props) {
     super(props);
-    this.renderPitch = this.renderPitch.bind(this);
+    this.renderTabs = this.renderTabs.bind(this);
   }
   render() {
     return (
       <div>
         <MediaQuery maxWidth={breakpoints.md - 1}>
-          {partial(this.renderPitch, this.getScaleFactor(breakpoints.sm))}
+          {partial(this.renderTabs, this.getScaleFactor(breakpoints.sm))}
         </MediaQuery>
         <MediaQuery minWidth={breakpoints.md} maxWidth={breakpoints.lg - 1}>
-          {partial(this.renderPitch, this.getScaleFactor(breakpoints.md))}
+          {partial(this.renderTabs, this.getScaleFactor(breakpoints.md))}
         </MediaQuery>
         <MediaQuery minWidth={breakpoints.lg} maxWidth={breakpoints.xl - 1}>
-          {partial(this.renderPitch, this.getScaleFactor(breakpoints.lg))}
+          {partial(this.renderTabs, this.getScaleFactor(breakpoints.lg))}
         </MediaQuery>
         <MediaQuery minWidth={breakpoints.xl}>
-          {partial(this.renderPitch, this.getScaleFactor(breakpoints.xl))}
+          {partial(this.renderTabs, this.getScaleFactor(breakpoints.xl))}
         </MediaQuery>
       </div>
     );
   }
-  renderPitch(scaleFactor, matches) {
-    const {x, y} = this.props.location.query;
-    const activeMarker = [x, y];
+  renderTabs(scaleFactor, matches) {
+    const data = Object.assign({}, this.props, {
+      activeMarker: this.getActiveMarker(),
+      scaleFactor
+    });
     return (
-      matches && <Tabs
-        marker={Object.assign({}, this.props.marker, {activeMarker})}
-        onMarkerChange={this.props.onMarkerChange}
-        pitch={Object.assign({}, this.props.pitch, {scaleFactor})}
-        tabs={this.props.tabs}
-        onTabChange={this.props.onTabChange}
-        tab={this.props.params.tab}
-      />
+      matches && <Tabs data={data} />
     );
+  }
+  getActiveMarker() {
+    const {x, y} = this.props.location.query;
+    return [Number(x), Number(y)];
   }
   getScaleFactor(breakpoint) {
     return Math.floor((breakpoint / this.props.pitch.length) - 1);

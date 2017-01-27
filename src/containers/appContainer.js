@@ -7,11 +7,10 @@ import {App} from '../App';
 const mapStateToProps = (state) => {
   return {
     pitch: state.pitch,
-    marker: state.marker,
+    markers: state.markers,
     tabs: state.tabs
   };
 };
-
 
 const mapDispatchToProps = (dispatch) => {
   const boundActionCreators = bindActionCreators(actionCreators, dispatch);
@@ -28,12 +27,8 @@ const mapDispatchToProps = (dispatch) => {
     onScaleFactorChange: (event) => {
       boundActionCreators.setScaleFactor(parseInt(event.target.value, 10));
     },
-    onMarkerChange: (func, router, event) => {
-      event.preventDefault();
-      const cursorPoint = func(event);
-      const path = `/${router.params.tab}?x=${cursorPoint[0]}&y=${cursorPoint[1]}`;
-      router.push(path);
-      boundActionCreators.setMarker(cursorPoint);
+    onMarkerChange: (marker) => {
+      boundActionCreators.setMarker(marker);
     },
     onTabChange: () => {
       boundActionCreators.setTab(event);
