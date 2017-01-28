@@ -27,5 +27,5 @@
     "eject": "react-scripts eject",
     "deploy": "npm run build && gh-pages -d build"
   },
-  "homepage": "https://github.com/davidsmith2/svg-football-pitch"
+  "homepage": "http://davidsmith2.github2.io/svg-football-pitch"
 }
