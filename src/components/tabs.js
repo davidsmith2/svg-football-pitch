@@ -5,6 +5,7 @@ import Nav from 'react-bootstrap/lib/Nav';
 import Navbar from 'react-bootstrap/lib/Navbar';
 import NavItem from 'react-bootstrap/lib/NavItem';
 import Row from 'react-bootstrap/lib/Row';
+import {browserHistory} from 'react-router';
 import {LinkContainer} from 'react-router-bootstrap';
 
 import {Graph} from './graph';
@@ -155,7 +156,7 @@ export class Tabs extends Component {
     const x = options.coords[0];
     const y = options.coords[1];
     const path = `${options.tab}?scale=${options.scale}&x=${x}&y=${y}`;
-    this.context.router.push(path);
+    browserHistory.push(path);
     this.props.data.onMarkerChange(options.coords);
   }
 };
