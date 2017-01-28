@@ -26,8 +26,7 @@ export class Tabs extends Component {
     this.updateMarkerOnClick = this.updateMarkerOnClick.bind(this);
   }
   componentWillMount() {
-    const {x, y} = this.props.data.location.query;
-    this.updateMarkerOnLoad([x ,y]);
+    this.updateMarkerOnLoad(this.props.data.activeMarker);
   }
   render() {
     return (
@@ -133,15 +132,16 @@ export class Tabs extends Component {
     return (<div>{el}</div>);
   }
   getPitchFactory() {
-    const {scale} = this.props.data.location.query;
     return PitchFactory(Object.assign({}, this.props.data.pitch, {
-      scaleFactor: Number(scale)
+      scaleFactor: this.props.data.scaleFactor,
+      orientation: (this.props.data.orientation === 'landscape') ? 'horizontal' : 'vertical'
     }));
   }
   updateMarkerOnLoad(coords) {
     this.navigate({
       tab: '/image',
       scale: this.props.data.scaleFactor,
+      orientation: this.props.data.orientation,
       coords
     });
   }
@@ -149,13 +149,14 @@ export class Tabs extends Component {
     this.navigate({
       tab: this.context.router.params.tab,
       scale: this.props.data.location.query.scale,
+      orientation: this.props.data.location.query.orientation,
       coords
     })
   }
   navigate(options) {
     const x = options.coords[0];
     const y = options.coords[1];
-    const path = `${options.tab}?scale=${options.scale}&x=${x}&y=${y}`;
+    const path = `${options.tab}?orientation=${options.orientation}&scale=${options.scale}&x=${x}&y=${y}`;
     browserHistory.push(path);
     this.props.data.onMarkerChange(options.coords);
   }

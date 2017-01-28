@@ -8,9 +8,11 @@ export class Graph extends Component {
     this.renderAxes();
   }
   render() {
-    const {activeMarker, markers} = this.props.data;
-    const {scale} = this.props.data.location.query;
     const pitchFactory = this.props.pitchFactory;
+    const {activeMarker, location, markers} = this.props.data;
+    const {orientation, scale} = location.query;
+    const x = activeMarker[0];
+    const y = activeMarker[1];
     this.renderAxes();
     return (
       <div
@@ -50,12 +52,18 @@ export class Graph extends Component {
         </div>
         {pitchFactory.inPlay(activeMarker) &&
           <Tooltip
-            activeMarker={activeMarker}
             data={pitchFactory.triangulateCoords(activeMarker)}
             id="shot-tooltip"
-            linkPathname="/image"
-            linkTitle="View on image"
-            scale={scale}
+            link={{
+              label: 'View on image',
+              pathname: '/image',
+              query: {
+                orientation,
+                scale,
+                x,
+                y
+              }
+            }}
             style={pitchFactory.getTooltipPosition(activeMarker)}
           />
         }

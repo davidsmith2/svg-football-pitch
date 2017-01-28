@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Component} from 'react';
 
 import {Arcs} from './arcs';
 import {Lines} from './lines';
@@ -9,63 +9,72 @@ import {
 } from './shot';
 import {styles} from '../styles';
 
-export const Image = (props) => {
-  const {activeMarker} = props.data;
-  const {scale} = props.data.location.query;
-  const pitchFactory = props.pitchFactory;
-  pitchFactory.getCursorPoint = pitchFactory.getCursorPoint.bind(pitchFactory);
-  return (
-    <div
-      id="image"
-      style={styles.pitch.image.container}
-    >
+export class Image extends Component {
+  render() {
+    const pitchFactory = this.props.pitchFactory;
+    const {activeMarker, location} = this.props.data;
+    const {orientation, scale} = location.query;
+    const x = activeMarker[0];
+    const y = activeMarker[1];
+    return (
       <div
-        onClick={(event) => {
-          event.preventDefault();
-          props.handleClick(pitchFactory.getCursorPoint(event))
-        }}
+        id="image"
+        style={styles.pitch.image.container}
       >
-        <svg
-          fill="transparent"
-          height={pitchFactory.getHeightInPixels()}
-          style={styles.pitch.image.svg}
-          width={pitchFactory.getWidthInPixels()}
+        <div
+          onClick={(event) => {
+            event.preventDefault();
+            this.props.handleClick(pitchFactory.getCursorPoint(event))
+          }}
         >
-          <g
-            transform={pitchFactory.transform()}
+          <svg
+            fill="transparent"
+            height={pitchFactory.getHeightInPixels()}
+            style={styles.pitch.image.svg}
+            width={pitchFactory.getWidthInPixels()}
           >
-            <Lines />
-            <Arcs />
-            {pitchFactory.inPlay(activeMarker) &&
-            <g>
-              <Marker
-                cx={activeMarker[0] * scale}
-                cy={activeMarker[1] * scale}
-                fill='red'
-                id="shot-marker"
-                r={scale}
-              />
-              <Angle
-                data={pitchFactory.getTriangle(activeMarker)}
-                id="shot-triangle"
-                stroke="yellow"
-              />
+            <g
+              transform={pitchFactory.transform()}
+            >
+              <Lines />
+              <Arcs />
+              {pitchFactory.inPlay(activeMarker) &&
+              <g>
+                <Marker
+                  cx={activeMarker[0] * scale || 0}
+                  cy={activeMarker[1] * scale || 0}
+                  fill='red'
+                  id="shot-marker"
+                  r={scale}
+                />
+                <Angle
+                  data={pitchFactory.getTriangle(activeMarker)}
+                  id="shot-triangle"
+                  stroke="yellow"
+                />
+              </g>
+              }
             </g>
-            }
-          </g>
-        </svg>
-      </div>
-      {pitchFactory.inPlay(activeMarker) &&
+          </svg>
+        </div>
+        {pitchFactory.inPlay(activeMarker) &&
         <Tooltip
-          activeMarker={activeMarker}
           data={pitchFactory.triangulateCoords(activeMarker)}
           id="shot-tooltip"
-          linkPathname="/graph"
-          linkTitle="View on graph"
-          scale={scale}
+          link={{
+            label: 'View on graph',
+            pathname: '/graph',
+            query: {
+              orientation,
+              scale,
+              x,
+              y
+            }
+          }}
           style={pitchFactory.getTooltipPosition(activeMarker)}
         />
-      }
-    </div>
-  );
-};
+        }
+      </div>
+    );
+  }
+}

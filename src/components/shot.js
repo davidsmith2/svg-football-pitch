@@ -31,14 +31,10 @@ export const Angle = (props) => <Line {...props} />;
  Shot tooltip
  */
 export const Tooltip = (props) => {
-  const title = props.activeMarker.slice().join(', ');
+  const title = [props.link.query.x, props.link.query.y].join(', ');
   const link = {
-    pathname: props.linkPathname,
-    query: {
-      x: props.activeMarker[0],
-      y: props.activeMarker[1],
-      scale: props.scale
-    }
+    pathname: props.link.pathname,
+    query: props.link.query
   };
   return (
     <div>
@@ -59,7 +55,7 @@ export const Tooltip = (props) => {
         <p>
           <strong>Angle:</strong> {format(props.data.angle, 'degree')}
         </p>
-        <Link to={link}>{props.linkTitle}</Link>
+        <Link to={link}>{props.link.label}</Link>
       </Popover>
     </div>
   );
