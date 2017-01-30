@@ -63,7 +63,7 @@ export class Image extends Component {
           id="shot-tooltip"
           link={{
             label: 'View on graph',
-            pathname: `${process.env.PUBLIC_URL}/graph`,
+            pathname: `/graph`,
             query: {
               orientation,
               scale,
