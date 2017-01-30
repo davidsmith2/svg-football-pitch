@@ -156,7 +156,7 @@ export class Tabs extends Component {
   navigate(options) {
     const x = options.coords[0];
     const y = options.coords[1];
-    const path = `${options.tab}?orientation=${options.orientation}&scale=${options.scale}&x=${x}&y=${y}`;
+    const path = `${process.env.PUBLIC_URL}${options.tab}?orientation=${options.orientation}&scale=${options.scale}&x=${x}&y=${y}`;
     browserHistory.push(path);
     this.props.data.onMarkerChange(options.coords);
   }
