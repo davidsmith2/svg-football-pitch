@@ -30,10 +30,10 @@ export const setLength = (length) => {
   };
 };
 
-export const setScaleFactor = (scaleFactor) => {
+export const setScale = (scale) => {
   return {
     type: SET_SCALE_FACTOR,
-    scaleFactor
+    scale
   };
 };
 

@@ -4,7 +4,7 @@
  * @returns {number}
  */
 export function getCoord(value) {
-  return Math.round(value / this.settings.scaleFactor);
+  return Math.round(value / this.settings.scale);
 }
 
 /**

@@ -1,8 +1,32 @@
 import * as d3 from 'd3';
 import {multiply} from 'lodash';
 
+import {
+  getTooltipPositionPart,
+  __triangulateCoords__
+} from './basicPitch';
 import * as CONSTANTS from '../constants';
 import {translate} from '../utils';
+
+function getAngle(activeMarker) {
+  return [
+    activeMarker,
+    this.getGoalPosts()[0][0],
+    this.getGoalPosts()[0][1],
+    activeMarker
+  ];
+}
+
+function getCursorPoint(event) {
+  const {perimeter, scale} = this.settings;
+  const offset = perimeter * scale;
+  const svg = document.querySelector('svg');
+  const pt = svg.createSVGPoint();
+  pt.x = event.clientX - offset;
+  pt.y = event.clientY - offset;
+  const {x, y} = pt.matrixTransform(svg.getScreenCTM().inverse());
+  return [x, y].map((value) => Math.round(value / scale));
+}
 
 function getGoalAreas() {
   const length = CONSTANTS.GOAL_AREA_LENGTH;
@@ -77,8 +101,16 @@ function getHalfwayLine() {
 }
 
 function getHeightInPixels() {
-  const {width, perimeter, scaleFactor} = this.settings;
-  return (multiply(width, scaleFactor)) + ((perimeter * 2) * scaleFactor);
+  const {width, perimeter, scale} = this.settings;
+  return (multiply(width, scale)) + ((perimeter * 2) * scale);
+}
+
+function getMarkerCenterX(activeMarker) {
+  return (activeMarker[0] * this.settings.scale) || 0;
+}
+
+function getMarkerCenterY(activeMarker) {
+  return (activeMarker[1] * this.settings.scale) || 0;
 }
 
 function getPenaltyArcs() {
@@ -108,6 +140,18 @@ function getPenaltyAreas() {
   ];
 }
 
+function getTooltipPosition(activeMarker) {
+  const left = getTooltipPositionPart.call(this, activeMarker[0]);
+  const top = getTooltipPositionPart.call(this, activeMarker[1]) - 40;
+  return {
+    arrowOffsetLeft: -10,
+    arrowOffsetTop: 35,
+    left,
+    placement: 'right',
+    top
+  };
+}
+
 function getTouchLines() {
   return [
     [
@@ -122,41 +166,35 @@ function getTouchLines() {
 }
 
 function getWidthInPixels() {
-  const {length, perimeter, scaleFactor} = this.settings;
-  return (multiply(length, scaleFactor)) + ((perimeter * 2) * scaleFactor);
+  const {length, perimeter, scale} = this.settings;
+  return (multiply(length, scale)) + ((perimeter * 2) * scale);
 }
 
 function getXScale() {
-  const {length, scaleFactor} = this.settings;
+  const {length, scale} = this.settings;
   return d3
     .scaleLinear()
     .domain([0, length])
-    .range([0, multiply(length, scaleFactor)]);
+    .range([0, multiply(length, scale)]);
 }
 
 function getYScale() {
-  const {width, scaleFactor} = this.settings;
+  const {width, scale} = this.settings;
   return d3
     .scaleLinear()
     .domain([0, width])
-    .range([0, multiply(width, scaleFactor)]);
-}
-
-function inPlay(coords) {
-  const withinGoalLines = coords[0] > -1 && coords[0] <= this.settings.length;
-  const withinTouchLines = coords[1] > -1 && coords[1] <= this.settings.width;
-  return withinGoalLines && withinTouchLines;
+    .range([0, multiply(width, scale)]);
 }
 
 function transformCenterCircle() {
-  const tx = this.getHalfwayLinePoint() * this.settings.scaleFactor;
-  const ty = this.getMidwayLinePoint() * this.settings.scaleFactor;
+  const tx = this.getHalfwayLinePoint() * this.settings.scale;
+  const ty = this.getMidwayLinePoint() * this.settings.scale;
   return translate(tx, ty);
 }
 
 function transformCenterMark() {
-  const tx = this.getHalfwayLinePoint() * this.settings.scaleFactor;
-  const ty = this.getMidwayLinePoint() * this.settings.scaleFactor;
+  const tx = this.getHalfwayLinePoint() * this.settings.scale;
+  const ty = this.getMidwayLinePoint() * this.settings.scale;
   return translate(tx, ty);
 }
 
@@ -168,48 +206,58 @@ function transformCornerArc(i) {
     ty = 0;
   }
   if (i === 1) {
-    tx = this.settings.length * this.settings.scaleFactor;
+    tx = this.settings.length * this.settings.scale;
     ty = 0;
   }
   if (i === 2) {
-    tx = this.settings.length * this.settings.scaleFactor;
-    ty = this.settings.width * this.settings.scaleFactor;
+    tx = this.settings.length * this.settings.scale;
+    ty = this.settings.width * this.settings.scale;
   }
   if (i === 3) {
     tx = 0;
-    ty = this.settings.width * this.settings.scaleFactor;
+    ty = this.settings.width * this.settings.scale;
   }
   return translate(tx, ty);
 }
 
 function transformPenaltyArc(i) {
-  const tx = this.getPenaltyMarkPoint(i) * this.settings.scaleFactor;
-  const ty = this.getMidwayLinePoint() * this.settings.scaleFactor;
+  const tx = this.getPenaltyMarkPoint(i) * this.settings.scale;
+  const ty = this.getMidwayLinePoint() * this.settings.scale;
   return translate(tx, ty);
 }
 
 function transformPenaltyMark(i) {
-  const tx = this.getPenaltyMarkPoint(i) * this.settings.scaleFactor;
-  const ty = this.getMidwayLinePoint() * this.settings.scaleFactor;
+  const tx = this.getPenaltyMarkPoint(i) * this.settings.scale;
+  const ty = this.getMidwayLinePoint() * this.settings.scale;
   return translate(tx, ty);
 }
-export const horizontalPitch = {
+
+function triangulateCoords() {
+  return __triangulateCoords__.apply(this, arguments);
+}
+
+export const landscapePitch = {
+  getAngle,
+  getCursorPoint,
   getGoalAreas,
   getGoalLines,
   getGoalPosts,
   getGoals,
   getHalfwayLine,
   getHeightInPixels,
+  getMarkerCenterX,
+  getMarkerCenterY,
   getPenaltyArcs,
   getPenaltyAreas,
+  getTooltipPosition,
   getTouchLines,
   getWidthInPixels,
   getXScale,
   getYScale,
-  inPlay,
   transformCenterCircle,
   transformCenterMark,
   transformCornerArc,
   transformPenaltyArc,
-  transformPenaltyMark
+  transformPenaltyMark,
+  triangulateCoords
 };

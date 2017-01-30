@@ -41,16 +41,16 @@ export class Image extends Component {
               {pitchFactory.inPlay(activeMarker) &&
               <g>
                 <Marker
-                  cx={activeMarker[0] * scale || 0}
-                  cy={activeMarker[1] * scale || 0}
+                  cx={pitchFactory.getMarkerCenterX(activeMarker)}
+                  cy={pitchFactory.getMarkerCenterY(activeMarker)}
                   fill='red'
-                  id="shot-marker"
+                  id='marker'
                   r={scale}
                 />
                 <Angle
-                  data={pitchFactory.getTriangle(activeMarker)}
-                  id="shot-triangle"
-                  stroke="yellow"
+                  data={pitchFactory.getAngle(activeMarker)}
+                  id='angle'
+                  stroke='yellow'
                 />
               </g>
               }
@@ -60,7 +60,7 @@ export class Image extends Component {
         {pitchFactory.inPlay(activeMarker) &&
         <Tooltip
           data={pitchFactory.triangulateCoords(activeMarker)}
-          id="shot-tooltip"
+          id="tooltip"
           link={{
             label: 'View on graph',
             pathname: `/graph`,

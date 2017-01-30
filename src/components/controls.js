@@ -12,21 +12,21 @@ export const Controls = (props) => {
             <input
               name="orientation"
               type="radio"
-              value="vertical"
+              value="portrait"
               onChange={props.data.onOrientationChange}
-              defaultChecked={props.data.pitch.orientation === 'vertical'}
+              defaultChecked={props.data.pitch.orientation === 'portrait'}
             />
-            Vertical
+            Portrait
           </label>
           <label>
             <input
               name="orientation"
               type="radio"
-              value="horizontal"
+              value="landscape"
               onChange={props.data.onOrientationChange}
-              defaultChecked={props.data.pitch.orientation === 'horizontal'}
+              defaultChecked={props.data.pitch.orientation === 'landscape'}
             />
-            Horizontal
+            Landscape
           </label>
         </fieldset>
         <fieldset>
@@ -55,9 +55,9 @@ export const Controls = (props) => {
           <label>
             Factor
             <select
-              name="scaleFactor"
-              value={props.data.pitch.scaleFactor}
-              onChange={props.data.onScaleFactorChange}
+              name="scale"
+              value={props.data.pitch.scale}
+              onChange={props.data.onScaleChange}
             >
               <option value="2">2</option>
               <option value="4">4</option>

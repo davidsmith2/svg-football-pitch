@@ -1,8 +1,8 @@
 const initialState = {
-  orientation: 'horizontal',
+  orientation: 'landscape',
   length: 115,
   width: 73,
-  scaleFactor: 2
+  scale: 2
 };
 
 export default function pitch(state = initialState, action) {
@@ -21,7 +21,7 @@ export default function pitch(state = initialState, action) {
       });
     case 'SET_SCALE_FACTOR':
       return Object.assign({}, state, {
-        scaleFactor: action.scaleFactor
+        scale: action.scale
       });
     default:
       return state;

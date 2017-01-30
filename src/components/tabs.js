@@ -133,14 +133,14 @@ export class Tabs extends Component {
   }
   getPitchFactory() {
     return PitchFactory(Object.assign({}, this.props.data.pitch, {
-      scaleFactor: this.props.data.scaleFactor,
-      orientation: (this.props.data.orientation === 'landscape') ? 'horizontal' : 'vertical'
+      scale: this.props.data.scale,
+      orientation: this.props.data.orientation
     }));
   }
   updateMarkerOnLoad(coords) {
     this.navigate({
       tab: '/image',
-      scale: this.props.data.scaleFactor,
+      scale: this.props.data.scale,
       orientation: this.props.data.orientation,
       coords
     });

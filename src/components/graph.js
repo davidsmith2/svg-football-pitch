@@ -13,7 +13,6 @@ export class Graph extends Component {
     const {orientation, scale} = location.query;
     const x = activeMarker[0];
     const y = activeMarker[1];
-    this.renderAxes();
     return (
       <div
         id="graph"
@@ -31,8 +30,8 @@ export class Graph extends Component {
                 if (pitchFactory.inPlay(obj)) {
                   return (
                     <circle
-                      cx={obj[0] * scale}
-                      cy={obj[1] * scale}
+                      cx={pitchFactory.getMarkerCenterX(obj)}
+                      cy={pitchFactory.getMarkerCenterY(obj)}
                       key={`shot-marker-${i}`}
                       onClick={(event) => {
                         event.preventDefault();

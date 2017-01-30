@@ -39,11 +39,12 @@ export const Tooltip = (props) => {
   return (
     <div>
       <Popover
-        arrowOffsetTop={25}
+        arrowOffsetLeft={props.style.arrowOffsetLeft}
+        arrowOffsetTop={props.style.arrowOffsetTop}
         id={props.id}
-        placement="right"
+        placement={props.style.placement}
         positionLeft={props.style.left}
-        positionTop={props.style.top - 30}
+        positionTop={props.style.top}
         title={title}
       >
         <p>

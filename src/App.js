@@ -53,7 +53,7 @@ export class App extends Component {
     const {x, y} = this.props.location.query;
     const data = Object.assign({}, this.props, {
       activeMarker: this.getActiveMarker(x, y),
-      scaleFactor: this.getScaleFactor(options.breakpoint),
+      scale: this.getScale(options.breakpoint),
       orientation: options.orientation
     });
     return (
@@ -69,7 +69,7 @@ export class App extends Component {
     }
     return [Number(realX), Number(realY)];
   }
-  getScaleFactor(breakpoint) {
+  getScale(breakpoint) {
     return Math.floor((breakpoint / this.props.pitch.length) - 1);
   }
 }

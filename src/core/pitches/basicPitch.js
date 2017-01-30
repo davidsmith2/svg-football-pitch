@@ -1,18 +1,18 @@
 import * as d3 from 'd3';
 
 import * as CONSTANTS from '../constants';
+import triangulator from '../triangulator';
 import {
   getCoord,
   toRadians,
   translate
 } from '../utils';
-import triangulator from '../triangulator';
 
 function drawArc() {
   return d3
     .arc()
-    .innerRadius((d) => d.radius * this.settings.scaleFactor)
-    .outerRadius((d) => d.radius * this.settings.scaleFactor)
+    .innerRadius((d) => d.radius * this.settings.scale)
+    .outerRadius((d) => d.radius * this.settings.scale)
     .startAngle((d) => toRadians(d.startAngle))
     .endAngle((d) => toRadians(d.endAngle))
 }
@@ -27,8 +27,8 @@ function drawAxis(selector, axisType) {
 function drawLine() {
   return d3
     .line()
-    .x((d) => d[0] * this.settings.scaleFactor)
-    .y((d) => d[1] * this.settings.scaleFactor)
+    .x((d) => d[0] * this.settings.scale)
+    .y((d) => d[1] * this.settings.scale)
 }
 
 function getCenterCircle() {
@@ -62,17 +62,6 @@ function getCornerArcs() {
     {radius: radius, startAngle: 270, endAngle: 360},
     {radius: radius, startAngle: 0, endAngle: 90}
   ];
-}
-
-function getCursorPoint(event) {
-  const {perimeter, scaleFactor} = this.settings;
-  const offset = perimeter * scaleFactor;
-  const svg = document.querySelector('svg');
-  const pt = svg.createSVGPoint();
-  pt.x = event.clientX - offset;
-  pt.y = event.clientY - offset;
-  const {x, y} = pt.matrixTransform(svg.getScreenCTM().inverse());
-  return [x, y].map((value) => Math.round(value / scaleFactor));
 }
 
 /**
@@ -109,26 +98,10 @@ function getPenaltyMarks() {
   ];
 }
 
-function getTooltipPosition(coords) {
-  return {
-    left: getTooltipPositionPart.call(this, coords[0]),
-    top: getTooltipPositionPart.call(this, coords[1])
-  };
-}
-
-function getTooltipPositionPart(coord) {
-  const {perimeter, scaleFactor} = this.settings;
-  const offset = (perimeter * scaleFactor) + 5;
-  return (coord * scaleFactor) + offset;
-}
-
-function getTriangle(coords) {
-  return [
-    coords,
-    this.getGoalPosts()[0][0],
-    this.getGoalPosts()[0][1],
-    coords
-  ];
+export function getTooltipPositionPart(coord) {
+  const {perimeter, scale} = this.settings;
+  const offset = (perimeter * scale) + 5;
+  return (coord * scale) + offset;
 }
 
 function getXAxis() {
@@ -145,14 +118,20 @@ function getYAxis() {
     .tickSize(5);
 }
 
+function inPlay(activeMarker) {
+  const withinGoalLines = activeMarker[0] > -1 && activeMarker[0] <= this.settings.length;
+  const withinTouchLines = activeMarker[1] > -1 && activeMarker[1] <= this.settings.width;
+  return withinGoalLines && withinTouchLines;
+}
+
 function transform() {
   let tx, ty;
-  tx = ty = this.settings.perimeter * this.settings.scaleFactor;
+  tx = ty = this.settings.perimeter * this.settings.scale;
   return translate(tx, ty);
 }
 
-function triangulateCoords(coords) {
-  const sides = triangulator.getSides([this.getGoalPosts()[0][0], this.getGoalPosts()[0][1], coords]);
+export function __triangulateCoords__(activeMarker) {
+  const sides = triangulator.getSides([this.getGoalPosts()[0][0], this.getGoalPosts()[0][1], activeMarker]);
   const sidesByLength = sides.slice().sort((a, b) => b.yards > a.yards);
   const angles = triangulator.getAngles(sidesByLength);
   return Object.assign(
@@ -170,13 +149,10 @@ export const basicPitch = {
   getCenterMark,
   getCoords,
   getCornerArcs,
-  getCursorPoint,
   getHalfwayLinePoint,
   getMidwayLinePoint,
   getPenaltyMarks,
   getPenaltyMarkPoint,
-  getTooltipPosition,
-  getTriangle,
-  transform,
-  triangulateCoords
+  inPlay,
+  transform
 };

@@ -24,8 +24,8 @@ const mapDispatchToProps = (dispatch) => {
     onLengthChange: (event) => {
       boundActionCreators.setLength(parseInt(event.target.value, 10));
     },
-    onScaleFactorChange: (event) => {
-      boundActionCreators.setScaleFactor(parseInt(event.target.value, 10));
+    onScaleChange: (event) => {
+      boundActionCreators.setScale(parseInt(event.target.value, 10));
     },
     onMarkerChange: (marker) => {
       boundActionCreators.setMarker(marker);
