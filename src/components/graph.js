@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 
+import {Dialog} from './modal';
 import {Tooltip} from './shot';
 import {styles} from '../styles';
 
@@ -66,11 +67,28 @@ export class Graph extends Component {
             style={pitchFactory.getTooltipPosition(activeMarker)}
           />
         }
+        <Dialog
+          show={this.props.showModal}
+          title="Graph view"
+          body={this.getModalBody()}
+          onClickClose={this.props.closeModal}
+        />
       </div>
     );
   }
   renderAxes() {
     this.props.pitchFactory.drawAxis(this.refs['x-axis'], 'x');
     this.props.pitchFactory.drawAxis(this.refs['y-axis'], 'y');
+  }
+  getModalBody() {
+    return (
+      <ul>
+        <li>Click on a marker to display positional statistics.
+          <ul>
+            <li>Click on "View on image" to view the positional statistics on the image.</li>
+          </ul>
+        </li>
+      </ul>
+    );
   }
 }

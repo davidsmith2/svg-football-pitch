@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 
 import {Arcs} from './arcs';
+import {Dialog} from './modal';
 import {Lines} from './lines';
 import {
   Angle,
@@ -74,7 +75,25 @@ export class Image extends Component {
           style={pitchFactory.getTooltipPosition(activeMarker)}
         />
         }
+        <Dialog
+          show={this.props.showModal}
+          title="Image view"
+          body={this.getModalBody()}
+          onClickClose={this.props.closeModal}
+        />
       </div>
+    );
+  }
+  getModalBody() {
+    return (
+      <ul>
+        <li>Click inside the touchlines/goal lines to display positional statistics.
+          <ul>
+            <li>Click on "View on graph" to plot the positional statistics to a graph.</li>
+          </ul>
+        </li>
+        <li>Click outside the touchlines/goal lines to dismiss positional statistics.</li>
+      </ul>
     );
   }
 }

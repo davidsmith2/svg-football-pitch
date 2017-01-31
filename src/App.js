@@ -64,8 +64,8 @@ export class App extends Component {
     let realX = x;
     let realY = y;
     if (typeof x === 'undefined' && typeof y === 'undefined') {
-      realX = 0;
-      realY = 0;
+      realX = -1;
+      realY = -1;
     }
     return [Number(realX), Number(realY)];
   }

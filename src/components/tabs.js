@@ -1,3 +1,4 @@
+import {partial} from 'lodash';
 import React, {Component} from 'react';
 import Col from 'react-bootstrap/lib/Col';
 import Grid from 'react-bootstrap/lib/Grid';
@@ -8,6 +9,7 @@ import Row from 'react-bootstrap/lib/Row';
 import {browserHistory} from 'react-router';
 import {LinkContainer} from 'react-router-bootstrap';
 
+import {Dialog} from './modal';
 import {Graph} from './graph';
 import {Image} from './image';
 import {PitchFactory} from '../core/pitches/pitchFactory';
@@ -23,6 +25,14 @@ export class Tabs extends Component {
   }
   constructor(props) {
     super(props);
+    this.state = {
+      modal: {
+        tabs: true,
+        image: true,
+        graph: true
+      }
+    };
+    this.closeModal = this.closeModal.bind(this);
     this.updateMarkerOnClick = this.updateMarkerOnClick.bind(this);
   }
   componentWillMount() {
@@ -30,34 +40,32 @@ export class Tabs extends Component {
   }
   render() {
     return (
-      <Grid>
-        <Row>
-          <Col sm={12}>
-            <Navbar>
-              <Navbar.Header>
-                <Navbar.Brand>
-                  SVG football pitch
-                </Navbar.Brand>
-              </Navbar.Header>
-            </Navbar>
-          </Col>
-        </Row>
-        <Row>
-          <Col sm={12}>
-            <p>Calculates the angle to goal from any point on the pitch and plots the coordinates to a graph.</p>
-          </Col>
-        </Row>
-        <Row>
-          <Col sm={12}>
-            {this.renderTabs()}
-          </Col>
-        </Row>
-        <Row>
-          <Col sm={12}>
-            {this.renderTabPanel()}
-          </Col>
-        </Row>
-      </Grid>
+      <div>
+        <Grid>
+          <Row>
+            <Col sm={12}>
+              <Navbar>
+                <Navbar.Header>
+                  <Navbar.Brand>
+                    SVG football pitch
+                  </Navbar.Brand>
+                </Navbar.Header>
+              </Navbar>
+            </Col>
+          </Row>
+          <Row>
+            <Col sm={12}>
+              {this.renderTabPanel()}
+            </Col>
+          </Row>
+        </Grid>
+        <Dialog
+          show={this.state.modal.tabs}
+          title="SVG football pitch"
+          body={<p>Calculates the angle to goal from any point on the pitch.</p>}
+          onClickClose={partial(this.closeModal, 'tabs')}
+        />
+      </div>
     );
   }
   renderTabs() {
@@ -93,39 +101,26 @@ export class Tabs extends Component {
       case 'graph':
         el = (
           <div style={{padding: '1em'}}>
-            <div>
-              <ul>
-                <li>Click on a plot point to find the angle to goal.</li>
-                <li>Click on "View on image" to return to the image.</li>
-              </ul>
-            </div>
-            <div>
-              <Graph
-                data={this.props.data}
-                pitchFactory={this.pitchFactory}
-                handleClick={this.updateMarkerOnClick}
-              />
-            </div>
+            <Graph
+              data={this.props.data}
+              pitchFactory={this.pitchFactory}
+              handleClick={this.updateMarkerOnClick}
+              closeModal={partial(this.closeModal, 'graph')}
+              showModal={this.state.modal.graph && !this.state.modal.tabs}
+            />
           </div>
         );
         break;
       default:
         el = (
           <div style={{padding: '1em'}}>
-            <div>
-              <ul>
-                <li>Click inside the touchlines/goal lines to find the angle the goal.</li>
-                <li>Click on "View on graph" to plot the coordinates on a graph.</li>
-                <li>Click outside the touchlines/goal lines to dismiss the popover.</li>
-              </ul>
-            </div>
-            <div>
-              <Image
-                data={this.props.data}
-                pitchFactory={this.pitchFactory}
-                handleClick={this.updateMarkerOnClick}
-              />
-            </div>
+            <Image
+              data={this.props.data}
+              pitchFactory={this.pitchFactory}
+              handleClick={this.updateMarkerOnClick}
+              closeModal={partial(this.closeModal, 'image')}
+              showModal={this.state.modal.image && !this.state.modal.tabs}
+            />
           </div>
         );
     }
@@ -159,6 +154,10 @@ export class Tabs extends Component {
     const path = `${process.env.PUBLIC_URL}${options.tab}?orientation=${options.orientation}&scale=${options.scale}&x=${x}&y=${y}`;
     browserHistory.push(path);
     this.props.data.onMarkerChange(options.coords);
+  }
+  closeModal(view) {
+    this.state.modal[view] = false;
+    this.setState(this.state.modal);
   }
 };
 
