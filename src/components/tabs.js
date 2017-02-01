@@ -125,21 +125,23 @@ export class Tabs extends Component {
   }
   updateMarker(coords) {
     this.navigate({
-      coords,
-      orientation: this.getParam('orientation'),
-      scale: this.getParam('scale'),
-      tab: this.getPath()
+      path: this.getPath(),
+      query: {
+        coords,
+        orientation: this.getParam('orientation'),
+        scale: this.getParam('scale')
+      }
     });
   }
   navigate(options) {
-    const x = options.coords[0];
-    const y = options.coords[1];
-    const path = `${process.env.PUBLIC_URL}${options.tab}?orientation=${options.orientation}&scale=${options.scale}&x=${x}&y=${y}`;
-    browserHistory.push(path);
-    this.props.data.onMarkerChange(options.coords);
+    const {path, query} = options;
+    const {coords, orientation, scale} = query;
+    const url = `${process.env.PUBLIC_URL}/${path}?orientation=${orientation}&scale=${scale}&x=${coords[0]}&y=${coords[1]}`;
+    browserHistory.push(url);
+    this.props.data.onMarkerChange(coords);
   }
   getPath() {
-    return this.context.router.params.tab || this.props.data.tabs.activeTabPath;
+    return this.context.router.params.tab || this.props.data.tabs.activeTabName;
   }
   getParam(prop) {
     return this.props.data.location.query[prop] || this.props.data.pitch[prop];
