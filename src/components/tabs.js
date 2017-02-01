@@ -1,3 +1,4 @@
+import {fromJS} from 'immutable';
 import {partial} from 'lodash';
 import React, {Component} from 'react';
 import Col from 'react-bootstrap/lib/Col';
@@ -147,9 +148,12 @@ export class Tabs extends Component {
   getParam(prop) {
     return this.props.data.location.query[prop] || this.props.data.pitch[prop];
   }
-  closeModal(view) {
-    this.state.modal[view] = false;
-    this.setState(this.state.modal);
+  closeModal(modal) {
+    const nextState = fromJS(this.state).updateIn(
+      ['modal', modal],
+      (val) => false
+    );
+    this.setState(nextState.toJS());
   }
 };
 
