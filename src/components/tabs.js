@@ -33,10 +33,10 @@ export class Tabs extends Component {
       }
     };
     this.closeModal = this.closeModal.bind(this);
-    this.updateMarkerOnClick = this.updateMarkerOnClick.bind(this);
+    this.updateMarker = this.updateMarker.bind(this);
   }
   componentWillMount() {
-    this.updateMarkerOnLoad(this.props.data.activeMarker);
+    this.updateMarker(this.props.data.activeMarker);
   }
   render() {
     return (
@@ -95,58 +95,44 @@ export class Tabs extends Component {
     );
   }
   renderTabPanel() {
+    const {params, pitch} = this.props.data;
     let el;
-    this.pitchFactory = this.getPitchFactory();
-    switch(this.props.data.params.tab) {
-      case 'graph':
-        el = (
-          <div style={{padding: '1em'}}>
-            <Graph
-              data={this.props.data}
-              pitchFactory={this.pitchFactory}
-              handleClick={this.updateMarkerOnClick}
-              closeModal={partial(this.closeModal, 'graph')}
-              showModal={this.state.modal.graph && !this.state.modal.tabs}
-            />
-          </div>
-        );
-        break;
-      default:
-        el = (
-          <div style={{padding: '1em'}}>
-            <Image
-              data={this.props.data}
-              pitchFactory={this.pitchFactory}
-              handleClick={this.updateMarkerOnClick}
-              closeModal={partial(this.closeModal, 'image')}
-              showModal={this.state.modal.image && !this.state.modal.tabs}
-            />
-          </div>
-        );
+    this.pitchFactory = PitchFactory(pitch);
+    if (params.tab === 'graph') {
+      el = (
+        <div style={{padding: '1em'}}>
+          <Graph
+            data={this.props.data}
+            pitchFactory={this.pitchFactory}
+            handleClick={this.updateMarker}
+            closeModal={partial(this.closeModal, 'graph')}
+            showModal={this.state.modal.graph && !this.state.modal.tabs}
+          />
+        </div>
+      );
+    }
+    if (params.tab === 'image') {
+      el = (
+        <div style={{padding: '1em'}}>
+          <Image
+            data={this.props.data}
+            pitchFactory={this.pitchFactory}
+            handleClick={this.updateMarker}
+            closeModal={partial(this.closeModal, 'image')}
+            showModal={this.state.modal.image && !this.state.modal.tabs}
+          />
+        </div>
+      );
     }
     return (<div>{el}</div>);
   }
-  getPitchFactory() {
-    return PitchFactory(Object.assign({}, this.props.data.pitch, {
-      scale: this.props.data.scale,
-      orientation: this.props.data.orientation
-    }));
-  }
-  updateMarkerOnLoad(coords) {
+  updateMarker(coords) {
     this.navigate({
-      tab: '/image',
-      scale: this.props.data.scale,
-      orientation: this.props.data.orientation,
-      coords
+      coords,
+      orientation: this.getParam('orientation'),
+      scale: this.getParam('scale'),
+      tab: this.getPath()
     });
-  }
-  updateMarkerOnClick(coords) {
-    this.navigate({
-      tab: this.context.router.params.tab,
-      scale: this.props.data.location.query.scale,
-      orientation: this.props.data.location.query.orientation,
-      coords
-    })
   }
   navigate(options) {
     const x = options.coords[0];
@@ -154,6 +140,12 @@ export class Tabs extends Component {
     const path = `${process.env.PUBLIC_URL}${options.tab}?orientation=${options.orientation}&scale=${options.scale}&x=${x}&y=${y}`;
     browserHistory.push(path);
     this.props.data.onMarkerChange(options.coords);
+  }
+  getPath() {
+    return this.context.router.params.tab || this.props.data.tabs.activeTabPath;
+  }
+  getParam(prop) {
+    return this.props.data.location.query[prop] || this.props.data.pitch[prop];
   }
   closeModal(view) {
     this.state.modal[view] = false;

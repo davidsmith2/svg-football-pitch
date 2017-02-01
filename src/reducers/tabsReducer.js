@@ -1,5 +1,6 @@
 const initialState = {
-  activeTab: 1
+  activeTab: 1,
+  activeTabPath: '/image'
 };
 
 export default function tabs(state = initialState, action) {

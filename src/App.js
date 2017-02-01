@@ -17,8 +17,7 @@ export class App extends Component {
         <MediaQuery maxWidth={breakpoints.md - 1}>
           <MediaQuery orientation='landscape'>
             {partial(this.renderTabs, {
-              breakpoint: breakpoints.sm,
-              orientation: 'landscape'
+              breakpoint: breakpoints.sm
             })}
           </MediaQuery>
           <MediaQuery orientation='portrait'>
@@ -30,20 +29,17 @@ export class App extends Component {
         </MediaQuery>
         <MediaQuery minWidth={breakpoints.md} maxWidth={breakpoints.lg - 1}>
           {partial(this.renderTabs, {
-            breakpoint: breakpoints.md,
-            orientation: 'landscape'
+            breakpoint: breakpoints.md
           })}
         </MediaQuery>
         <MediaQuery minWidth={breakpoints.lg} maxWidth={breakpoints.xl - 1}>
           {partial(this.renderTabs, {
-            breakpoint: breakpoints.lg,
-            orientation: 'landscape'
+            breakpoint: breakpoints.lg
           })}
         </MediaQuery>
         <MediaQuery minWidth={breakpoints.xl}>
           {partial(this.renderTabs, {
-            breakpoint: breakpoints.xl,
-            orientation: 'landscape'
+            breakpoint: breakpoints.xl
           })}
         </MediaQuery>
       </div>
@@ -51,10 +47,13 @@ export class App extends Component {
   }
   renderTabs(options, matches) {
     const {x, y} = this.props.location.query;
+    const pitch = Object.assign({}, this.props.pitch, {
+      scale: this.getScale(options.breakpoint),
+      orientation: this.getOrientation(options.orientation)
+    });
     const data = Object.assign({}, this.props, {
       activeMarker: this.getActiveMarker(x, y),
-      scale: this.getScale(options.breakpoint),
-      orientation: options.orientation
+      pitch
     });
     return (
       matches && <Tabs data={data} />
@@ -71,5 +70,8 @@ export class App extends Component {
   }
   getScale(breakpoint) {
     return Math.floor((breakpoint / this.props.pitch.length) - 1);
+  }
+  getOrientation(orientation) {
+    return orientation || this.props.pitch.orientation;
   }
 }
