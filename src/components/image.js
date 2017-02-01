@@ -20,19 +20,23 @@ export class Image extends Component {
     return (
       <div
         id="image"
-        style={styles.pitch.image.container}
+        style={Object.assign({}, styles.pitch.container.outer, {
+          height: pitchFactory.getHeightInPixels(),
+          width: pitchFactory.getWidthInPixels(),
+        })}
       >
         <div
           onClick={(event) => {
             event.preventDefault();
             this.props.handleClick(pitchFactory.getCursorPoint(event))
           }}
+          style={styles.pitch.container.inner}
         >
           <svg
             fill="transparent"
-            height={pitchFactory.getHeightInPixels()}
-            style={styles.pitch.image.svg}
-            width={pitchFactory.getWidthInPixels()}
+            style={Object.assign({}, styles.pitch.svg, {
+              backgroundColor: 'green'
+            })}
           >
             <g
               transform={pitchFactory.transform()}

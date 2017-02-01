@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 
 import {Dialog} from './modal';
-import {Tooltip} from './shot';
+import {
+  Marker,
+  Tooltip
+} from './shot';
 import {styles} from '../styles';
 
 export class Graph extends Component {
@@ -17,22 +20,28 @@ export class Graph extends Component {
     return (
       <div
         id="graph"
-        style={styles.pitch.image.container}
+        style={Object.assign({}, styles.pitch.container.outer, {
+          height: pitchFactory.getHeightInPixels(),
+          width: pitchFactory.getWidthInPixels(),
+        })}
       >
-        <div>
+        <div
+          style={styles.pitch.container.inner}
+        >
           <svg
-            height={pitchFactory.getHeightInPixels()}
             ref="graph"
-            style={{padding: pitchFactory.settings.perimeter * scale}}
-            width={pitchFactory.getWidthInPixels()}
+            style={Object.assign({}, styles.pitch.svg, {
+              padding: pitchFactory.settings.perimeter * scale
+            })}
           >
             <g>
               {markers.map((obj, i) => {
                 if (pitchFactory.inPlay(obj)) {
                   return (
-                    <circle
+                    <Marker
                       cx={pitchFactory.getMarkerCenterX(obj)}
                       cy={pitchFactory.getMarkerCenterY(obj)}
+                      fill='red'
                       key={`shot-marker-${i}`}
                       onClick={(event) => {
                         event.preventDefault();

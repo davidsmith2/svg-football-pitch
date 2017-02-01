@@ -101,28 +101,24 @@ export class Tabs extends Component {
     this.pitchFactory = PitchFactory(pitch);
     if (params.tab === 'graph') {
       el = (
-        <div style={{padding: '1em'}}>
-          <Graph
-            data={this.props.data}
-            pitchFactory={this.pitchFactory}
-            handleClick={this.updateMarker}
-            closeModal={partial(this.closeModal, 'graph')}
-            showModal={this.state.modal.graph && !this.state.modal.tabs}
-          />
-        </div>
+        <Graph
+          data={this.props.data}
+          pitchFactory={this.pitchFactory}
+          handleClick={this.updateMarker}
+          closeModal={partial(this.closeModal, 'graph')}
+          showModal={this.state.modal.graph && !this.state.modal.tabs}
+        />
       );
     }
     if (params.tab === 'image') {
       el = (
-        <div style={{padding: '1em'}}>
-          <Image
-            data={this.props.data}
-            pitchFactory={this.pitchFactory}
-            handleClick={this.updateMarker}
-            closeModal={partial(this.closeModal, 'image')}
-            showModal={this.state.modal.image && !this.state.modal.tabs}
-          />
-        </div>
+        <Image
+          data={this.props.data}
+          pitchFactory={this.pitchFactory}
+          handleClick={this.updateMarker}
+          closeModal={partial(this.closeModal, 'image')}
+          showModal={this.state.modal.image && !this.state.modal.tabs}
+        />
       );
     }
     return (<div>{el}</div>);
