@@ -11,6 +11,10 @@ import {
 import {styles} from '../styles';
 
 export class Image extends Component {
+  constructor(props) {
+    super(props);
+    this.onClickContainer = this.onClickContainer.bind(this);
+  }
   render() {
     const pitchFactory = this.props.pitchFactory;
     const {activeMarker, location} = this.props.data;
@@ -26,10 +30,7 @@ export class Image extends Component {
         })}
       >
         <div
-          onClick={(event) => {
-            event.preventDefault();
-            this.props.handleClick(pitchFactory.getCursorPoint(event))
-          }}
+          onClick={this.onClickContainer}
           style={styles.pitch.container.inner}
         >
           <svg
@@ -99,5 +100,10 @@ export class Image extends Component {
         <li>Click outside the touchlines/goal lines to dismiss positional statistics.</li>
       </ul>
     );
+  }
+  onClickContainer(event) {
+    event.preventDefault();
+    this.props.handleClick(this.props.pitchFactory.getCursorPoint(event));
+
   }
 }

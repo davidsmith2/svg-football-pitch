@@ -8,6 +8,10 @@ import {
 import {styles} from '../styles';
 
 export class Graph extends Component {
+  constructor(props) {
+    super(props);
+    this.onClickContainer = this.onClickContainer.bind(this);
+  }
   componentDidMount() {
     this.renderAxes();
   }
@@ -26,6 +30,7 @@ export class Graph extends Component {
         })}
       >
         <div
+          onClick={this.onClickContainer}
           style={styles.pitch.container.inner}
         >
           <svg
@@ -42,11 +47,8 @@ export class Graph extends Component {
                       cx={pitchFactory.getMarkerCenterX(obj)}
                       cy={pitchFactory.getMarkerCenterY(obj)}
                       fill='red'
+                      id={obj}
                       key={`shot-marker-${i}`}
-                      onClick={(event) => {
-                        event.preventDefault();
-                        this.props.handleClick(obj)
-                      }}
                       r={scale}
                     />
                   );
@@ -99,5 +101,13 @@ export class Graph extends Component {
         </li>
       </ul>
     );
+  }
+  onClickContainer(event) {
+    event.preventDefault();
+    let coords = event.target.id.split(',');
+    if (coords.length !== 2) {
+      coords = [-1, -1];
+    }
+    this.props.handleClick(coords);
   }
 }
