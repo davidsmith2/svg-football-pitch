@@ -1,12 +1,14 @@
 import {fromJS} from 'immutable';
 import {partial} from 'lodash';
 import React, {Component} from 'react';
-import Col from 'react-bootstrap/lib/Col';
-import Grid from 'react-bootstrap/lib/Grid';
-import Nav from 'react-bootstrap/lib/Nav';
-import Navbar from 'react-bootstrap/lib/Navbar';
-import NavItem from 'react-bootstrap/lib/NavItem';
-import Row from 'react-bootstrap/lib/Row';
+import {
+  Col,
+  Grid,
+  Nav,
+  Navbar,
+  NavItem,
+  Row
+} from 'react-bootstrap';
 import {browserHistory} from 'react-router';
 import {LinkContainer} from 'react-router-bootstrap';
 
@@ -124,12 +126,13 @@ export class Tabs extends Component {
     return (<div>{el}</div>);
   }
   updateMarker(coords) {
+    const {orientation, scale} = this.props.data.pitch;
     this.navigate({
       path: this.getPath(),
       query: {
         coords,
-        orientation: this.getParam('orientation'),
-        scale: this.getParam('scale')
+        orientation,
+        scale
       }
     });
   }
@@ -142,9 +145,6 @@ export class Tabs extends Component {
   }
   getPath() {
     return this.context.router.params.tab || this.props.data.tabs.activeTabName;
-  }
-  getParam(prop) {
-    return this.props.data.location.query[prop] || this.props.data.pitch[prop];
   }
   closeModal(modal) {
     const nextState = fromJS(this.state).updateIn(
