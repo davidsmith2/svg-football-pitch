@@ -8,6 +8,7 @@
     "redux-devtools": "^3.3.2"
   },
   "dependencies": {
+    "array.prototype.find": "^2.0.3",
     "d3": "^4.2.8",
     "history": "^3.0.0",
     "immutable": "^3.8.1",

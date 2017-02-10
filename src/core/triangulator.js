@@ -1,3 +1,4 @@
+import * as find from 'array.prototype.find';
 import {flow} from 'lodash';
 
 import {
@@ -79,7 +80,7 @@ const getAngles = (sides) => {
  * @returns {{angle: string}}
  */
 const getAngleToGoal = (angles) => {
-  let angle = angles.find((angle) => angle.id === 'A').degrees;
+  let angle = find.default(angles, (angle) => angle.id === 'A').degrees;
   return {
     angle: angle
   };
